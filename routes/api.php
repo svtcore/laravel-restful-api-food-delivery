@@ -21,9 +21,9 @@ Route::prefix('v1')->group(function () {
 
   Route::middleware('auth:api')->group(function () {
 
-    Route::middleware('role:user')->group(function () {
-      Route::prefix('users')->group(function () {
-        
+    Route::namespace('API\v1\user')->middleware('role:user')->group(function () {
+      Route::prefix('restaurants')->group(function () {
+        Route::get('/', 'RestaurantController@index')->name('user.restaurant.index');
       });
 
     });
