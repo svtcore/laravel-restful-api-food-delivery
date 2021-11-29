@@ -41,6 +41,22 @@ Route::prefix('v1')->group(function () {
         Route::post('/', 'OrderController@store')->name('user.orders.store');
       });
 
+      Route::prefix('products')->group(function () {
+        Route::get('/', 'ProductController@index')->name('user.products.index');
+        Route::get('/{id}', 'ProductController@show')->name('user.products.show');
+        Route::prefix('categories')->group(function () {
+          Route::get('/{id}', 'ProductController@showByCategoryId')->name('user.products.byCategoryId');
+        });
+        Route::prefix('restaurants')->group(function () {
+          Route::get('/{id}', 'ProductController@showByRestaurantId')->name('user.products.byRestaurantId');
+        });
+      });
+
+      Route::prefix('payment-methods')->group(function () {
+        Route::get('/', 'PaymentMethodController@index')->name('user.payments.index');
+        Route::get('/{id}', 'PaymentMethodController@show')->name('user.payments.show');
+      });
+
     });
 
     Route::middleware('role:admin')->group(function () {
