@@ -5,8 +5,12 @@ namespace App\Http\Controllers\API\v1\user;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Classes\Restaurants;
+use App\Http\Controllers\API\v1\BaseController;
+use App\Http\Requests\api\v1\restaurants\SearchRequest;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
-class RestaurantController extends Controller
+class RestaurantController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -22,72 +26,51 @@ class RestaurantController extends Controller
 
     public function index()
     {
-        return response()->json($this->restaurants->get());
+        $result = $this->restaurants->get();
+        if (count($result) > 0)
+            return $this->sendResponse('RESTAURANT', $result);
+        else
+            return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $result = $this->restaurants->getById($id);
+        if (isset($result->id))
+            return $this->sendResponse('RESTAURANT', $result);
+        else
+            return $this->sendError('RESTAURANT', 'RECORD_NOT_FOUND');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function search(Request $request)
     {
-        //
+        $validation = Validator::make($request->all(), (new SearchRequest)->rules());
+        if ($validation->fails()) {
+            return $this->sendError('RESTAURANT', 'SEARCH_VALIDATION_EXCEPTION', $validation->errors());
+        } else {
+            $result = $this->restaurants->search($request->key);
+            if (count($result) > 0)
+                return $this->sendResponse('RESTAURANT', $result);
+            else
+                return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function showByCategoryId($id)
     {
-        //
+        $result = $this->restaurants->getByProductCategoryId($id);
+        if (count($result) > 0)
+            return $this->sendResponse('RESTAURANT', $result);
+        else
+            return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function showByCityId($id)
     {
-        //
+        $result = $this->restaurants->getByCityId($id);
+        if (count($result) > 0)
+            return $this->sendResponse('RESTAURANT', $result);
+        else
+            return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
 }

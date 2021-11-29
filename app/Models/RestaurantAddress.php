@@ -9,15 +9,25 @@ class RestaurantAddress extends Model
 {
     use HasFactory;
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'city_id',
+        'street_type_id',
+        'restaurant_id',
+        'id',
+    ];
+
+
     public function restaurants() {
         return $this->belongsTo(Restaurant::class);
     }
 
-    public function restaurant_cities() {
+    public function restaurant_city() {
         return $this->belongsTo(RestaurantCity::class, 'city_id');
     }
 
-    public function restaurant_street_types() {
+    public function restaurant_street_type() {
         return $this->belongsTo(RestaurantStreetType::class, 'street_type_id');
     }
 }

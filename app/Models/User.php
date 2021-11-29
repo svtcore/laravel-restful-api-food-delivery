@@ -8,16 +8,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Http\Traits\HasRoleTrait;
+use App\Http\Traits\IsOwnerTrait;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoleTrait;
+    use HasApiTokens, HasFactory, Notifiable, HasRoleTrait, IsOwnerTrait;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
+
     protected $fillable = [
         'first_name',
         'last_name',

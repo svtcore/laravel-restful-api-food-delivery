@@ -31,7 +31,7 @@ class RegisterController extends BaseController
                 return $this->sendError('REGISTER','VALIDATION_EXCEPTION', $validation->errors());
             } else {
                 $result = $this->user_auth->register($request);
-                return $this->sendResponse('REGISTER', 'SUCCESSFUL_REGISTRATION', $result);
+                return $this->sendResponse('REGISTER', $result);
             }
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];

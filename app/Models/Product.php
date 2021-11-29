@@ -9,11 +9,18 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'restaurant_id',
+        'category_id',
+    ];
+
     public function order_products() {
         return $this->hasMany(OrderProduct::class);
     }
 
-    public function product_categories() {
+    public function product_category() {
         return $this->belongsTo(OrderCategory::class, 'category_id');
     }
 

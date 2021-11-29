@@ -17,6 +17,7 @@ class DiscountFactory extends Factory
             'name' => $this->faker->monthName($max = 'now'),
             'code' => strtoupper($this->faker->bothify('###??')),
             'amount' => $this->faker->numberBetween(10, 999),
+            'value' => $this->faker->numberBetween(1, 100),
             'expired' => $this->faker->dateTimeBetween('now', '+31 days'),
         ];
     }

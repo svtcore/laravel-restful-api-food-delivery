@@ -22,8 +22,23 @@ Route::prefix('v1')->group(function () {
   Route::middleware('auth:api')->group(function () {
 
     Route::namespace('API\v1\user')->middleware('role:user')->group(function () {
+
       Route::prefix('restaurants')->group(function () {
         Route::get('/', 'RestaurantController@index')->name('user.restaurant.index');
+        Route::get('/search', 'RestaurantController@search')->name('user.restaurant.search');
+        Route::get('/{id}', 'RestaurantController@show')->name('user.restaurant.show');
+        Route::prefix('categories')->group(function () {
+          Route::get('/{id}', 'RestaurantController@showByCategoryId');
+        });
+        Route::prefix('cities')->group(function () {
+          Route::get('/{id}', 'RestaurantController@showByCityId');
+        });
+      });
+
+      Route::prefix('orders')->group(function () {
+        Route::get('/', 'OrderController@index')->name('user.orders.index');
+        Route::get('/{id}', 'OrderController@show')->name('user.orders.show');
+        Route::post('/', 'OrderController@store')->name('user.orders.store');
       });
 
     });

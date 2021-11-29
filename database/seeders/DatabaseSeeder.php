@@ -57,25 +57,29 @@ class DatabaseSeeder extends Seeder
         ProductCategory::factory($config['product_category'])->create();
         RestaurantCity::factory($config['restaurant_city'])->create();
         RestaurantStreetType::factory($config['restaurant_street_type'])->create();
+        Restaurant::factory($config['restaurant'])->create();
+        for ($i = 1; $i <= $config['restaurant']; $i++){
+            for ($j = 1; $j <=3; $j++){
+                RestaurantAddress::factory()->create([
+                    'restaurant_id' => $i,
+                    'city_id' => rand(1, $config['restaurant_city']),
+                    'street_type_id' => rand(1, $config['restaurant_street_type']),
+                ]);
+            }
+            for ($j = 1; $j <= $config['delivery_type']; $j++){
+                DeliveryType::factory()->create([
+                    'restaurant_id' => $i,
+                ]);
+            }
+        }
         for ($i = 1; $i <= $config['user']; $i++) {
             $user = User::factory()->create();
             $user->createToken('name');
             $array = array($user_role, $admin_role);
             $rand_val = $array[rand(0, count($array) - 1)];
             $user->roles()->attach($rand_val);
-        }
-        Restaurant::factory($config['restaurant'])->create();
-        for ($i = 1; $i <= $config['restaurant']; $i++){
-            RestaurantAddress::factory()->create([
-                'restaurant_id' => $i,
-                'city_id' => rand(1, $config['restaurant_city']),
-                'street_type_id' => rand(1, $config['restaurant_street_type']),
-            ]);
-            for ($j = 1; $j <= $config['delivery_type']; $j++){
-                DeliveryType::factory()->create([
-                    'restaurant_id' => $i,
-                ]);
-            }
+            $random_id = rand(1, $config['restaurant']);
+            if ($random_id % 2 == 0) $user->restaurants()->attach(Restaurant::find($random_id));
         }
         for ($i = 1; $i <= $config['product']; $i++){
             Product::factory()->create([

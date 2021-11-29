@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('payment_type_id');
             $table->unsignedInteger('discount_id')->nullable();
             $table->unsignedInteger('status_id');
-            $table->float('total_cost');
+            $table->float('total_cost')->nullable();
             $table->text('comment');
             $table->timestamps();
         });

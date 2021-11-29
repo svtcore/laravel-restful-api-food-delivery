@@ -9,6 +9,11 @@ class RestaurantStreetType extends Model
 {
     use HasFactory;
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function restaurant_addresses() {
         return $this->hasMany(RestaurantAddress::class);
     }

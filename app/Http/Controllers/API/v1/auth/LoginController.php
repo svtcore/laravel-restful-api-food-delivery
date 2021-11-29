@@ -31,7 +31,7 @@ class LoginController extends BaseController
             } else {
                 $content = $this->user_auth->login($request);
                 if (array_key_exists('access_token', $content))
-                    return $this->sendResponse('LOGIN','SUCCESSFUL_AUTHORIZATION', $content);
+                    return $this->sendResponse('LOGIN', $content);
                 else
                     return $this->sendError('LOGIN','WRONG_CREDENTIALS', NULL);
             }

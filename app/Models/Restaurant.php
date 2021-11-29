@@ -9,6 +9,12 @@ class Restaurant extends Model
 {
     use HasFactory;
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'pivot',
+    ];
+
     public function products() {
         return $this->hasMany(Product::class);
     }
@@ -19,5 +25,9 @@ class Restaurant extends Model
 
     public function restaurant_addresses() {
         return $this->hasMany(RestaurantAddress::class);
+    }
+
+    public function users() {
+        return $this->belongsTo(User::class,'users_restaurants');
     }
 }

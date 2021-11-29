@@ -18,6 +18,7 @@ class CreateDiscountsTable extends Migration
             $table->string('name');
             $table->string('code');
             $table->unsignedInteger('amount')->nullable();
+            $table->unsignedInteger('value');
             $table->dateTime('expired')->nullable();
             $table->timestamps();
         });
