@@ -85,7 +85,7 @@ class Orders
         try {
             $order = Order::create([
                 'user_id' => $user_id,
-                'payment_type_id' => $request->payment_type,
+                'payment_type_id' => $request->payment_type_id,
                 'discount_id' => $request->discount_id,
                 'status_id' => 1,
                 'total_cost' => NULL,
@@ -112,7 +112,7 @@ class Orders
             $order->update([
                 'total_cost' => $total_cost,
             ]);
-            return json_encode(['order_id' => $order->id]);
+            return ['order_id' => $order->id];
         } catch (Exception $e) {
             print($e);
         }

@@ -38,14 +38,16 @@ class OrderController extends BaseController
      */
     public function store(Request $request)
     {
-        print($this->orders->add($request, Auth::user()->id));
-        /*$validation = Validator::make($request->all(), (new StoreRequest)->rules());
+        $validation = Validator::make($request->all(), (new StoreRequest)->rules());
         if ($validation->fails()) {
             return $this->sendError('ORDER', 'ORDER_STORE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
-            $order = $this->orders->add($request->all(), Auth::user()->id);
-            print($order);
-        }*/
+            $order = $this->orders->add($request, Auth::user()->id);
+            if (isset($order))
+                return $this->sendResponse('ORDER', $order);
+            else
+                return $this->sendError('ORDER', 'FAILED_ADD_ORDER');
+        }
     }
 
     /**

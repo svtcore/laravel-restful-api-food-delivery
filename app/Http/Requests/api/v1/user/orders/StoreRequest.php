@@ -13,7 +13,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,18 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'payment_type_id' => 'required',
+            'discount_id' => 'required',
+            'comment' => 'nullable',
+            'city_id' => 'required',
+            'street_type_id' => 'required',
+            'street_name' => 'required',
+            'building_number' => 'required',
+            'entrace' => 'nullable',
+            'access_code' => 'nullable',
+            'floor' => 'nullable',
+            'apartment' => 'nullable',
+            'products' => 'required',
         ];
     }
 }
