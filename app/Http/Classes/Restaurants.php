@@ -3,6 +3,7 @@
 namespace App\Http\Classes;
 
 use App\Models\Restaurant;
+use App\Models\RestaurantCity;
 use App\Models\User;
 
 class Restaurants
@@ -56,9 +57,29 @@ class Restaurants
             return 0;
     }
 
-    public function getByCityId($id)
+    public function getByProductId($id)
     {
         $restaurants = Restaurant::with('restaurant_addresses', 'restaurant_addresses.restaurant_city', 'restaurant_addresses.restaurant_street_type', 'delivery_types')
+            ->whereHas('products', function ($q) use ($id) {
+                $q->where('id', $id);
+            })->get();
+        if ($this->check_result($restaurants))
+            return $restaurants;
+        else
+            return 0;
+    }
+
+    public function getByCityId($id)
+    {
+        $restaurants = Restaurant::with([
+            'restaurant_addresses' => function ($q) use ($id) {
+                $q->where('city_id', $id);
+            },
+            'restaurant_addresses.restaurant_city' =>  function ($q) use ($id) {
+                $q->where('id', $id);
+            },
+            'restaurant_addresses.restaurant_street_type', 'delivery_types'
+        ])
             ->whereHas('restaurant_addresses', function ($q) use ($id) {
                 $q->where('city_id', $id);
             })->get();
@@ -97,4 +118,16 @@ class Restaurants
         else
             return 0;
     }
+
+    public function getCities()
+    {
+        $restaurant_cities = RestaurantCity::all();
+        if ($this->check_result($restaurant_cities))
+            return $restaurant_cities;
+        else
+            return 0;
+    }
+
+    
+    
 }

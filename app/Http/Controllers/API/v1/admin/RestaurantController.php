@@ -22,7 +22,11 @@ class RestaurantController extends BaseController
 
     public function index()
     {
-        
+        $result = $this->restaurants->getByUserId(Auth::user()->id);
+        if (count($result) > 0)
+            return $this->sendResponse('RESTAURANT', $result);
+        else
+            return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
 
     /**
@@ -89,14 +93,5 @@ class RestaurantController extends BaseController
     public function destroy($id)
     {
         //
-    }
-
-    public function showByUserId()
-    {
-        $result = $this->restaurants->getByUserId(Auth::user()->id);
-        if (count($result) > 0)
-            return $this->sendResponse('RESTAURANT', $result);
-        else
-            return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
 }

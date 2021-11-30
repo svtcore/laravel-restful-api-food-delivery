@@ -65,37 +65,21 @@ class OrderController extends BaseController
             return $this->sendError('ORDER', 'RECORD_NOT_FOUND');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function showCitiesList()
     {
-        //
+        $result = $this->orders->getCities();
+        if (count($result) > 0)
+            return $this->sendResponse('ORDER_CITY', $result);
+        else
+            return $this->sendError('ORDER_CITY', 'RECORDS_NOT_FOUND');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function showStreetTypesList()
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $result = $this->orders->getStreetTypes();
+        if (count($result) > 0)
+            return $this->sendResponse('ORDER_STREET_TYPE', $result);
+        else
+            return $this->sendError('ORDER_STREET_TYPE', 'RECORDS_NOT_FOUND');
     }
 }

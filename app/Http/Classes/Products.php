@@ -3,6 +3,7 @@
 namespace App\Http\Classes;
 
 use App\Models\Product;
+use App\Models\ProductCategory;
 
 class Products
 {
@@ -62,6 +63,14 @@ class Products
         }
         if ($this->check_result($product))
             return $product;
+        else
+            return 0;
+    }
+
+    public function getCategories(){
+        $categories = ProductCategory::all();
+        if ($this->check_result($categories))
+            return $categories;
         else
             return 0;
     }

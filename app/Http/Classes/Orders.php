@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Restaurant;
+use App\Models\OrderCity;
+use App\Models\OrderStreetType;
 use App\Models\User;
 use Exception;
 
@@ -116,5 +118,23 @@ class Orders
         } catch (Exception $e) {
             print($e);
         }
+    }
+
+    public function getCities()
+    {
+        $order_cities = OrderCity::all();
+        if ($this->check_result($order_cities))
+            return $order_cities;
+        else
+            return 0;
+    }
+
+    public function getStreetTypes()
+    {
+        $order_street_types = OrderStreetType::all();
+        if ($this->check_result($order_street_types))
+            return $order_street_types;
+        else
+            return 0;
     }
 }

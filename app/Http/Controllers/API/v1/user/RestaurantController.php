@@ -73,4 +73,22 @@ class RestaurantController extends BaseController
         else
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
+
+    public function showByProductId($id)
+    {
+        $result = $this->restaurants->getByProductId($id);
+        if (count($result) > 0)
+            return $this->sendResponse('RESTAURANT', $result);
+        else
+            return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
+    }
+
+    public function showCitiesList()
+    {
+        $result = $this->restaurants->getCities();
+        if (count($result) > 0)
+            return $this->sendResponse('RESTAURANT_CITY', $result);
+        else
+            return $this->sendError('RESTAURANT_CITY', 'RECORDS_NOT_FOUND');
+    }
 }

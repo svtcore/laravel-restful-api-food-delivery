@@ -88,4 +88,13 @@ class ProductController extends BaseController
                 return $this->sendError('PRODUCT', 'FAILED_GET_PRODUCTS');
         }
     }
+
+    public function showCategoryList()
+    {
+        $result = $this->products->getCategories();
+        if (count($result) > 0)
+            return $this->sendResponse('PRODUCT_CATEGORY', $result);
+        else
+            return $this->sendError('PRODUCT_CATEGORY', 'RECORDS_NOT_FOUND');
+    }
 }
