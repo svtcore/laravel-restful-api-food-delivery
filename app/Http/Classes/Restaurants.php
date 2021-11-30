@@ -5,6 +5,7 @@ namespace App\Http\Classes;
 use App\Models\Restaurant;
 use App\Models\RestaurantCity;
 use App\Models\User;
+use Exception;
 
 class Restaurants
 {
@@ -128,6 +129,95 @@ class Restaurants
             return 0;
     }
 
-    
-    
+
+    public function add($request, $user_id)
+    {
+        try {
+            $restaurant = Restaurant::create([
+                'name' => $request->name,
+                'working_time_start' => $request->working_time_start,
+                'working_time_end' => $request->working_time_end,
+                'working_day_start' => $request->working_day_start,
+                'working_day_end' => $request->working_day_end,
+                'description' => $request->description,
+            ]);
+            $restaurant->restaurant_addresses()->create([
+                'city_id' => $request->city_id,
+                'street_type_id' => $request->street_type_id,
+                'street_name' => $request->street_name,
+                'building_number' => $request->building_number,
+            ]);
+            $user = User::find($user_id);
+            $user->restaurants()->attach($restaurant);
+            return ['restaurant_id' => $restaurant->id];
+        } catch (Exception $e) {
+            print($e);
+        }
+    }
+
+    public function check_restaurant_access($user_id, $restaurant_id, $address_id)
+    {
+        $restaurants = User::with(
+            'restaurants',
+            'restaurants.restaurant_addresses',
+            'restaurants.restaurant_addresses.restaurant_city',
+            'restaurants.restaurant_addresses.restaurant_street_type',
+            'restaurants.delivery_types'
+        )
+            ->where('id', $user_id)->get();
+        if ($this->check_result($restaurants)) {
+            if (isset($restaurants[0]['restaurants'])) {
+                if (count($restaurants[0]['restaurants']) > 0) {
+                    for ($i = 0; $i < count($restaurants[0]['restaurants']); $i++) {
+                        $rest_id = intval($restaurants[0]['restaurants'][$i]['id']);
+                        if ($rest_id == $restaurant_id) {
+                            if ($address_id != NULL) {
+                                for ($j = 0; $j < count($restaurants[0]['restaurants'][$i]['restaurant_addresses']); $j++) {
+                                    $addr_id = intval($restaurants[0]['restaurants'][$i]['restaurant_addresses'][$j]['id']);
+                                    if ($addr_id == $address_id) return 1;
+                                }
+                            }else return 1;
+                        }
+                    }
+                    return 0;
+                }
+            } else return 0;
+        } else return 0;
+    }
+
+    public function update($request, $id, $user_id)
+    {
+        try {
+            if ($this->check_restaurant_access($user_id, intval($id), intval($request->address_id))) {
+                $restaurant = Restaurant::find($id);
+                $restaurant->update([
+                    'name' => $request->name,
+                    'working_time_start' => $request->working_time_start,
+                    'working_time_end' => $request->working_time_end,
+                    'working_day_start' => $request->working_day_start,
+                    'working_day_end' => $request->working_day_end,
+                    'description' => $request->description,
+                ]);
+                $restaurant->restaurant_addresses()->where('id', $request->address_id)->update([
+                    'city_id' => $request->city_id,
+                    'street_type_id' => $request->street_type_id,
+                    'street_name' => $request->street_name,
+                    'building_number' => $request->building_number,
+                ]);
+                return ['restaurant_id' => $restaurant->id];
+            } else return 0;
+        } catch (Exception $e) {
+            print($e);
+        }
+    }
+
+    public function delete($id, $user_id){
+        if ($this->check_restaurant_access($user_id, intval($id), NULL)) {
+            $rest = Restaurant::findOrFail($id);
+            $rest->delivery_types()->delete();
+            $rest->restaurant_addresses()->delete();
+            $rest->delete();
+            return 1;
+        }else return 0;
+    }
 }

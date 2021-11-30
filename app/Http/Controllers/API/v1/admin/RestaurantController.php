@@ -6,15 +6,12 @@ use App\Http\Controllers\api\v1\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Classes\Restaurants;
+use App\Http\Requests\api\v1\admin\restaurants\StoreRequest;
+use App\Http\Requests\api\v1\admin\restaurants\UpdateRequest;
+use Illuminate\Support\Facades\Validator;
 
 class RestaurantController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     public function __construct()
     {
         $this->restaurants = new Restaurants();
@@ -29,69 +26,49 @@ class RestaurantController extends BaseController
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $validation = Validator::make($request->all(), (new StoreRequest)->rules());
+        if ($validation->fails()) {
+            return $this->sendError('RESTAURANT', 'STORE_VALIDATION_EXCEPTION', $validation->errors());
+        } else {
+            $order = $this->restaurants->add($request, Auth::user()->id);
+            if (isset($order))
+                return $this->sendResponse('RESTAURANT', $order);
+            else
+                return $this->sendError('RESTAURANT', 'FAILED_ADD_RESTAURANT');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $result = $this->restaurants->getById($id);
+        if (isset($result->id))
+            return $this->sendResponse('RESTAURANT', $result);
+        else
+            return $this->sendError('RESTAURANT', 'RECORD_NOT_FOUND');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $validation = Validator::make($request->all(), (new UpdateRequest)->rules());
+        if ($validation->fails()) {
+            return $this->sendError('RESTAURANT', 'UPDATE_VALIDATION_EXCEPTION', $validation->errors());
+        } else {
+            $order = $this->restaurants->update($request, $id, Auth::user()->id);
+            if (isset($order) && $order != 0)
+                return $this->sendResponse('RESTAURANT', $order);
+            else
+                return $this->sendError('RESTAURANT', 'FAILED_UPDATE_RESTAURANT');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $result = $this->restaurants->delete($id, Auth::user()->id);
+        if ($result)
+            return $this->sendResponse('RESTAURANT', $result);
+        else
+            return $this->sendError('RESTAURANT', 'FAILED_DELETE_RESTAURANT');
     }
 }

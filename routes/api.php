@@ -71,15 +71,18 @@ Route::prefix('v1')->group(function () {
       });
     });
 
-    /*Route::namespace('API\v1\admin')->middleware('role:admin')->group(function () {
+    Route::namespace('API\v1\admin')->middleware('role:admin')->group(function () {
       Route::prefix('restaurants')->group(function () {
         Route::get('/', 'RestaurantController@index')->name('admin.restaurant.index');
         Route::post('/', 'RestaurantController@store')->name('admin.restaurant.store');
+        Route::put('/{id}', 'RestaurantController@update')->name('admin.restaurant.update');
+        Route::get('/{id}', 'RestaurantController@show')->name('user.restaurant.show');
+        Route::delete('/{id}', 'RestaurantController@destroy')->name('user.restaurant.destroy');
         Route::prefix('addresses')->group(function () {
           Route::post('/', 'RestaurantController@store_address')->name('admin.restaurant.store_address');
         });
       });
       
-    });*/
+    });
   });
 });

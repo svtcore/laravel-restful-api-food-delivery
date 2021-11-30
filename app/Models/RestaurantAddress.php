@@ -15,7 +15,13 @@ class RestaurantAddress extends Model
         'city_id',
         'street_type_id',
         'restaurant_id',
-        'id',
+    ];
+
+    protected $fillable = [
+        'city_id',
+        'street_type_id',
+        'street_name',
+        'building_number',
     ];
 
 

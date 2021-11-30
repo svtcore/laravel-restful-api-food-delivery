@@ -15,19 +15,32 @@ class Restaurant extends Model
         'pivot',
     ];
 
-    public function products() {
+    protected $fillable = [
+        'name',
+        'working_time_start',
+        'working_time_end',
+        'working_day_start',
+        'working_day_end',
+        'description',
+    ];
+
+    public function products()
+    {
         return $this->hasMany(Product::class);
     }
 
-    public function delivery_types() {
+    public function delivery_types()
+    {
         return $this->hasMany(DeliveryType::class);
     }
 
-    public function restaurant_addresses() {
+    public function restaurant_addresses()
+    {
         return $this->hasMany(RestaurantAddress::class);
     }
 
-    public function users() {
-        return $this->belongsTo(User::class,'users_restaurants');
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'users_restaurants');
     }
 }
