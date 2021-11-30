@@ -15,6 +15,13 @@ class DeliveryType extends Model
         'restaurant_id',
     ];
 
+    protected $fillable = [
+        'restaurant_id',
+        'name',
+        'price',
+        'available',
+    ];
+
     public function restaurants() {
         return $this->belongsTo(Restaurant::class);
     }

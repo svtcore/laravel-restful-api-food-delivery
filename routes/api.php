@@ -73,16 +73,29 @@ Route::prefix('v1')->group(function () {
 
     Route::namespace('API\v1\admin')->middleware('role:admin')->group(function () {
       Route::prefix('restaurants')->group(function () {
+        Route::prefix('{id_rest}')->group(function () {
+
+          Route::prefix('delivery-types')->group(function () {
+            Route::get('/', 'RestaurantController@showDeliveryTypes');
+            Route::get('/{id}', 'DeliveryTypeController@show');
+            Route::post('/', 'DeliveryTypeController@store');
+            Route::put('/{id}', 'DeliveryTypeController@update');
+            Route::delete('/{id}', 'DeliveryTypeController@destroy');
+          });
+
+          Route::prefix('addresses')->group(function () {
+            Route::get('/{id}', 'RestaurantAddressController@show');
+            Route::post('/', 'RestaurantAddressController@store');
+            Route::put('/{id}', 'RestaurantAddressController@update');
+            Route::delete('/{id}', 'RestaurantAddressController@destroy');
+          });
+        });
         Route::get('/', 'RestaurantController@index')->name('admin.restaurant.index');
         Route::post('/', 'RestaurantController@store')->name('admin.restaurant.store');
         Route::put('/{id}', 'RestaurantController@update')->name('admin.restaurant.update');
-        Route::get('/{id}', 'RestaurantController@show')->name('user.restaurant.show');
-        Route::delete('/{id}', 'RestaurantController@destroy')->name('user.restaurant.destroy');
-        Route::prefix('addresses')->group(function () {
-          Route::post('/', 'RestaurantController@store_address')->name('admin.restaurant.store_address');
-        });
+        Route::get('/{id}', 'RestaurantController@show')->name('admin.restaurant.show');
+        Route::delete('/{id}', 'RestaurantController@destroy')->name('admin.restaurant.destroy');
       });
-      
     });
   });
 });

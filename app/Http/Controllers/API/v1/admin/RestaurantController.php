@@ -71,4 +71,13 @@ class RestaurantController extends BaseController
         else
             return $this->sendError('RESTAURANT', 'FAILED_DELETE_RESTAURANT');
     }
+
+    public function showDeliveryTypes(Request $request){
+        $restaurant_id = intval($request->route('id_rest'));
+        $result = $this->restaurants->getDeliveryTypes($restaurant_id);
+        if (count($result) > 0)
+            return $this->sendResponse('DELIVERY_TYPE', $result);
+        else
+            return $this->sendError('DELIVERY_TYPE', 'RECORDS_NOT_FOUND');
+    }
 }

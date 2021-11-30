@@ -5,6 +5,7 @@ namespace App\Http\Classes;
 use App\Models\Restaurant;
 use App\Models\RestaurantCity;
 use App\Models\User;
+use App\Models\RestaurantAddress;
 use Exception;
 
 class Restaurants
@@ -176,7 +177,7 @@ class Restaurants
                                     $addr_id = intval($restaurants[0]['restaurants'][$i]['restaurant_addresses'][$j]['id']);
                                     if ($addr_id == $address_id) return 1;
                                 }
-                            }else return 1;
+                            } else return 1;
                         }
                     }
                     return 0;
@@ -211,13 +212,82 @@ class Restaurants
         }
     }
 
-    public function delete($id, $user_id){
+    public function delete($id, $user_id)
+    {
         if ($this->check_restaurant_access($user_id, intval($id), NULL)) {
             $rest = Restaurant::findOrFail($id);
             $rest->delivery_types()->delete();
             $rest->restaurant_addresses()->delete();
             $rest->delete();
             return 1;
-        }else return 0;
+        } else return 0;
+    }
+
+    public function getAddressById($restaurant_id, $address_id, $user_id)
+    {
+        if ($this->check_restaurant_access($user_id, $restaurant_id, $address_id)) {
+            $restaurants = RestaurantAddress::with([
+                'restaurant_city', 'restaurant_street_type'
+            ])->where('id', $address_id)->first();
+            if ($this->check_result($restaurants))
+                return $restaurants;
+            else
+                return 0;
+        } else return 0;
+    }
+
+    public function addAddress($request, $restaurant_id, $user_id)
+    {
+        try {
+            if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
+                $restaurant = Restaurant::findOrFail(intval($restaurant_id));
+                $address = $restaurant->restaurant_addresses()->create([
+                    'city_id' => $request->city_id,
+                    'street_type_id' => $request->street_type_id,
+                    'street_name' => $request->street_name,
+                    'building_number' => $request->building_number,
+                ]);
+                return ['address_id' => $address->id];
+            } else return 0;
+        } catch (Exception $e) {
+            print($e);
+        }
+    }
+
+    public function updateAddress($request, $restaurant_id, $address_id, $user_id)
+    {
+        try {
+            if ($this->check_restaurant_access($user_id, $restaurant_id, $address_id)) {
+                $restaurant = Restaurant::findOrFail(intval($restaurant_id));
+                $address = $restaurant->restaurant_addresses()->where('id', $address_id)->update([
+                    'city_id' => $request->city_id,
+                    'street_type_id' => $request->street_type_id,
+                    'street_name' => $request->street_name,
+                    'building_number' => $request->building_number,
+                ]);
+                return $address;
+            } else return 0;
+        } catch (Exception $e) {
+            print($e);
+        }
+    }
+
+    public function deleteAddress($request, $restaurant_id,  $address_id, $user_id)
+    {
+        if ($this->check_restaurant_access($user_id, $restaurant_id, $address_id)) {
+            $rest = RestaurantAddress::findOrFail($address_id);
+            $rest->delete();
+            return 1;
+        } else return 0;
+    }
+
+    public function getDeliveryTypes($id)
+    {
+        $dl = new DeliveryTypes();
+        $result = $dl->getByRestaurantId($id);
+        if ($this->check_result($result))
+            return $result;
+        else
+            return 0;
     }
 }
