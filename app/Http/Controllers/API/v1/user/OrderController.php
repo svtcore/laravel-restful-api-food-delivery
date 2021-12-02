@@ -58,7 +58,7 @@ class OrderController extends BaseController
      */
     public function show($id)
     {
-        $result = $this->orders->getById($id, Auth::user()->id);
+        $result = $this->orders->getByIdUserId($id, Auth::user()->id);
         if (isset($result->id))
             return $this->sendResponse('ORDER', $result);
         else

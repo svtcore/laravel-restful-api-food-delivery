@@ -290,4 +290,12 @@ class Restaurants
         else
             return 0;
     }
+
+    public function getAddresses($id){
+        $restaurant_addresses = RestaurantAddress::where('restaurant_id', $id)->get();
+        if ($this->check_result($restaurant_addresses))
+            return $restaurant_addresses;
+        else
+            return 0;
+    }
 }

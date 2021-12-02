@@ -20,7 +20,12 @@ class RestaurantAddressController extends BaseController
 
     public function index(Request $request)
     {
-        
+        $restaurant_id = intval($request->route('id_rest'));
+        $result = $this->restaurants->getAddresses($restaurant_id);
+        if (count($result) > 0)
+            return $this->sendResponse('RESTAURANT_ADDRESS', $result);
+        else
+            return $this->sendError('RESTAURANT_ADDRESS', 'RECORDS_NOT_FOUND');
     }
 
     public function show(Request $request)
@@ -28,7 +33,6 @@ class RestaurantAddressController extends BaseController
         $restaurant_id = intval($request->route('id_rest'));
         $address_id = intval($request->route('id'));
         $result = $this->restaurants->getAddressById($restaurant_id, $address_id, Auth::user()->id);
-        #dd($result);
         if (isset($result->id))
             return $this->sendResponse('RESTAURANT_ADDRESS', $result);
         else
@@ -59,7 +63,7 @@ class RestaurantAddressController extends BaseController
             return $this->sendError('RESTAURANT_ADDRESS', 'UPDATE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
             $restaurant = $this->restaurants->updateAddress($request, $restaurant_id, $address_id, Auth::user()->id);
-            if (isset($restaurant) && $restaurant != 0)
+            if (isset($restaurant))
                 return $this->sendResponse('RESTAURANT_ADDRESS', $restaurant);
             else
                 return $this->sendError('RESTAURANT_ADDRESS', 'FAILED_UPDATE_ADDRESS');
