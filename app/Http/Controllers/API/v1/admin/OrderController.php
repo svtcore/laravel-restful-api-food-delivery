@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\api\v1\admin\orders\StoreRequest;
 use App\Http\Requests\api\v1\admin\orders\UpdateRequest;
+use App\Http\Requests\api\v1\admin\orders\StatusUpdateRequest;
 
 class OrderController extends BaseController
 {
@@ -92,6 +93,22 @@ class OrderController extends BaseController
         }
     }
 
+    public function updateByStatus(Request $request)
+    {
+        $restaurant_id = intval($request->route('id_rest'));
+        $order_id = intval($request->route('id'));
+        $validation = Validator::make($request->all(), (new StatusUpdateRequest)->rules());
+        if ($validation->fails()) {
+            return $this->sendError('ORDER', 'ORDER_UPDATE_VALIDATION_EXCEPTION', $validation->errors());
+        } else {
+            $order = $this->orders->updateStatus($request, $order_id, $restaurant_id, Auth::user()->id);
+            if (isset($order))
+                return $this->sendResponse('ORDER', $order);
+            else
+                return $this->sendError('ORDER', 'FAILED_UPDATE_ORDER');
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -108,4 +125,17 @@ class OrderController extends BaseController
         else
             return $this->sendError('ORDER', 'FAILED_DELETE');
     }
+
+    public function showByStatus(Request $request)
+    {
+        $restaurant_id = intval($request->route('id_rest'));
+        $status_id = intval($request->route('id'));
+        $result = $this->orders->getByStatusId($status_id, $restaurant_id, Auth::user()->id);
+        if (count($result) > 0)
+            return $this->sendResponse('ORDER', $result);
+        else
+            return $this->sendError('ORDER', 'RECORD_NOT_FOUND');
+    }
+
+    
 }

@@ -54,13 +54,24 @@ class Orders
             return 1;
     }
 
+    public function getByStatusId($status_id, $restaurant_id, $user_id){
+        if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
+            $orders = Order::with(['order_products.product', 'order_products.product.product_category', 'order_status'])->whereHas('order_products.product', function ($q) use ($restaurant_id) {
+                $q->where('restaurant_id', $restaurant_id);
+            })->where('status_id', $status_id)->get();
+            if ($this->check_result($orders))
+                return $orders;
+            else
+                return 0;
+        }
+    }
+
     public function getByRestaurantId($restaurant_id, $user_id)
     {
         if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
-            $orders = Order::with(['order_products.product', 'order_products.product.product_category'])->whereHas('order_products.product', function ($q) use ($restaurant_id) {
+            $orders = Order::with(['order_products.product', 'order_products.product.product_category','order_status'])->whereHas('order_products.product', function ($q) use ($restaurant_id) {
                 $q->where('restaurant_id', $restaurant_id);
             })->get();
-            return $orders;
             if ($this->check_result($orders))
                 return $orders;
             else
@@ -78,7 +89,7 @@ class Orders
             'discount',
             'payment_method',
             'order_products',
-            'order_products.product'
+            'order_products.product',
         )->where('user_id', $user_id)->get();
         if ($this->check_result($orders))
             return $orders;
@@ -202,6 +213,18 @@ class Orders
             } else return 0;
         } catch (Exception $e) {
             print($e);
+        }
+    }
+
+    public function updateStatus($request, $order_id, $restaurant_id, $user_id){
+        if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
+            $order = Order::findOrFail($order_id);
+            $order_data = $order->update([
+                'status_id' => $request->status_id,
+            ]);
+            if ($order_data != NULL)
+                return $order_data;
+            else return 0;
         }
     }
 

@@ -97,7 +97,11 @@ Route::prefix('v1')->group(function () {
               Route::get('/{id}', 'OrderController@show');
               Route::post('/', 'OrderController@store');
               Route::put('/{id}', 'OrderController@update');
+              Route::put('/{id}/status', 'OrderController@updateByStatus');
               Route::delete('/{id}', 'OrderController@destroy');
+              Route::prefix('statuses')->group(function () {
+                Route::get('/{id}', 'OrderController@showByStatus');
+              });
             });
           });
           Route::get('/', 'RestaurantController@index')->name('admin.restaurant.index');
