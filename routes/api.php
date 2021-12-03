@@ -21,7 +21,7 @@ Route::prefix('v1')->group(function () {
 
   Route::middleware('auth:api')->group(function () {
 
-    Route::namespace('API\v1\user')->middleware('role:user')->group(function () {
+    Route::namespace('API\v1\user')->middleware('role:user,admin')->group(function () {
       Route::prefix('user')->group(function () {
         Route::prefix('restaurants')->group(function () {
           Route::prefix('cities')->group(function () {
@@ -93,15 +93,16 @@ Route::prefix('v1')->group(function () {
             });
 
             Route::prefix('orders')->group(function () {
+              Route::prefix('statuses')->group(function () {
+                Route::get('/', 'StatusController@index');
+                Route::get('/{id}', 'OrderController@showByStatus');
+              });
               Route::get('/', 'OrderController@index');
               Route::get('/{id}', 'OrderController@show');
               Route::post('/', 'OrderController@store');
               Route::put('/{id}', 'OrderController@update');
               Route::put('/{id}/status', 'OrderController@updateByStatus');
               Route::delete('/{id}', 'OrderController@destroy');
-              Route::prefix('statuses')->group(function () {
-                Route::get('/{id}', 'OrderController@showByStatus');
-              });
             });
           });
           Route::get('/', 'RestaurantController@index')->name('admin.restaurant.index');
