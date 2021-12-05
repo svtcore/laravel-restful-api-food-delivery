@@ -3,101 +3,101 @@
 namespace App\Http\Classes;
 
 use App\Models\Discount;
-use Illuminate\Support\Facades\Route;
 use App\Models\Order;
 use App\Models\OrderProduct;
-use App\Models\Restaurant;
 use App\Models\OrderCity;
 use App\Models\OrderStreetType;
-use App\Models\User;
 use Exception;
-use App\Http\Classes\Restaurants;
+use App\Http\Traits\ResultDataTrait;
 
 class Orders
 {
+    use ResultDataTrait;
 
-    public function check_restaurant_access($user_id, $restaurant_id, $address_id)
+    /**
+     * Input: status id, restaurant id, user id
+     * Output: collection of orders
+     * Description: Checking if current user has permission to manage data for restaurant.
+     * If true getting collection by params: restaurant, status
+     */
+    public function getByStatusId(int $status_id, int $restaurant_id, int $user_id): ?iterable
     {
-        $restaurants = User::with(
-            'restaurants',
-            'restaurants.restaurant_addresses',
-            'restaurants.restaurant_addresses.restaurant_city',
-            'restaurants.restaurant_addresses.restaurant_street_type',
-            'restaurants.delivery_types'
-        )
-            ->where('id', $user_id)->get();
-        if ($this->check_result($restaurants)) {
-            if (isset($restaurants[0]['restaurants'])) {
-                if (count($restaurants[0]['restaurants']) > 0) {
-                    for ($i = 0; $i < count($restaurants[0]['restaurants']); $i++) {
-                        $rest_id = intval($restaurants[0]['restaurants'][$i]['id']);
-                        if ($rest_id == $restaurant_id) {
-                            if ($address_id != NULL) {
-                                for ($j = 0; $j < count($restaurants[0]['restaurants'][$i]['restaurant_addresses']); $j++) {
-                                    $addr_id = intval($restaurants[0]['restaurants'][$i]['restaurant_addresses'][$j]['id']);
-                                    if ($addr_id == $address_id) return 1;
-                                }
-                            } else return 1;
-                        }
-                    }
-                    return 0;
-                }
-            } else return 0;
-        } else return 0;
-    }
-
-    public function check_result($result)
-    {
-        if (json_encode($result) == "null")
-            return 0;
-        else
-            return 1;
-    }
-
-    public function getByStatusId($status_id, $restaurant_id, $user_id){
-        if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
-            $orders = Order::with(['order_products.product', 'order_products.product.product_category', 'order_status'])->whereHas('order_products.product', function ($q) use ($restaurant_id) {
-                $q->where('restaurant_id', $restaurant_id);
-            })->where('status_id', $status_id)->get();
-            if ($this->check_result($orders))
-                return $orders;
-            else
-                return 0;
+        try {
+            if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
+                $orders = Order::with([
+                    'order_products.product',
+                    'order_products.product.product_category',
+                    'order_status'
+                ])
+                    ->whereHas('order_products.product', function ($q) use ($restaurant_id) {
+                        $q->where('restaurant_id', $restaurant_id);
+                    })->where('status_id', $status_id)->get();
+                if ($this->check_result($orders)) return $orders;
+                else return NULL;
+            }
+        } catch (Exception $e) {
+            return NULL;
         }
     }
 
-    public function getByRestaurantId($restaurant_id, $user_id)
+    /**
+     * Input: restaurant id, user id
+     * Output: collection
+     * Description: Checking if current user has permission to manage data for restaurant.
+     * If true getting orders by param restaurant id
+     */
+    public function getByRestaurantId(int $restaurant_id, int $user_id): ?iterable
     {
-        if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
-            $orders = Order::with(['order_products.product', 'order_products.product.product_category','order_status'])->whereHas('order_products.product', function ($q) use ($restaurant_id) {
-                $q->where('restaurant_id', $restaurant_id);
-            })->get();
-            if ($this->check_result($orders))
-                return $orders;
-            else
-                return 0;
-        } else return 0;
+        try {
+            if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
+                $orders = Order::with([
+                    'order_products.product',
+                    'order_products.product.product_category',
+                    'order_status'
+                ])->whereHas('order_products.product', function ($q) use ($restaurant_id) {
+                    $q->where('restaurant_id', $restaurant_id);
+                })->get();
+                if ($this->check_result($orders)) return $orders;
+                else return NULL;
+            } else return NULL;
+        } catch (Exception $e) {
+            return NULL;
+        }
     }
 
-    public function getPersonal($user_id)
+    /**
+     * Input: user id
+     * Output: collection
+     * Description: Checking if current user has permission to manage data for restaurant.
+     * If true getting orders which belong to current user
+     */
+    public function getPersonal(int $user_id): ?iterable
     {
-        $orders = Order::with(
-            'order_address',
-            'order_address.order_city',
-            'order_address.order_street_type',
-            'order_status',
-            'discount',
-            'payment_method',
-            'order_products',
-            'order_products.product',
-        )->where('user_id', $user_id)->get();
-        if ($this->check_result($orders))
-            return $orders;
-        else
-            return 0;
+        try {
+            $orders = Order::with(
+                'order_address',
+                'order_address.order_city',
+                'order_address.order_street_type',
+                'order_status',
+                'discount',
+                'payment_method',
+                'order_products',
+                'order_products.product',
+            )->where('user_id', $user_id)->get();
+            if ($this->check_result($orders)) return $orders;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
+        }
     }
 
-    public function getById($id, $restaurant_id, $user_id)
+    /**
+     * Input: order id, restaurant id, user id
+     * Output: object
+     * Description: Checking if current user has permission to manage data for restaurant.
+     * If true getting object of order by id
+     */
+    public function getById(int $id, int $restaurant_id, int $user_id): ?object
     {
         if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
             $order = Order::with(
@@ -114,59 +114,79 @@ class Orders
                 ->whereHas('order_products.product', function ($q) use ($restaurant_id) {
                     $q->where('restaurant_id', $restaurant_id);
                 })->first();
-            if ($this->check_result($order))
-                return $order;
-            else
-                return 0;
-        } else return 0;
+            if ($this->check_result($order)) return $order;
+            else return NULL;
+        } else return NULL;
     }
 
-    public function getByIdUserId($id, $user_id)
+    /**
+     * Input: order id, user id
+     * Output: object
+     * Description: Checking if current user has permission to manage data for restaurant.
+     * If true getting orders by params order id and user id to avoid that another user can not get 
+     * order data of another user
+     */
+    public function getByIdUserId(int $id, int $user_id): ?object
     {
-        $order = Order::with(
-            'order_address',
-            'order_address.order_city',
-            'order_address.order_street_type',
-            'order_status',
-            'discount',
-            'payment_method',
-            'order_products',
-            'order_products.product'
-        )
-            ->where('id', $id)
-            ->where('user_id', $user_id)->first();
-        if ($this->check_result($order))
-            return $order;
-        else
-            return 0;
-    }
-
-
-
-    public function calculate_cost($order_id, $discount_id)
-    {
-        $total_cost = 0;
-        $products = OrderProduct::with('product')->where('order_id', $order_id)->get();
-        for ($i = 0; $i < count($products); $i++) {
-            $amount = $products[$i]['amount'];
-            $price = $products[$i]['product']['price'];
-            $total_cost = $total_cost + ($amount * $price);
+        try {
+            $order = Order::with(
+                'order_address',
+                'order_address.order_city',
+                'order_address.order_street_type',
+                'order_status',
+                'discount',
+                'payment_method',
+                'order_products',
+                'order_products.product'
+            )
+                ->where('id', $id)
+                ->where('user_id', $user_id)->first();
+            if ($this->check_result($order)) return $order;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
         }
-        if ($discount_id == NULL)
-            return $total_cost;
-        else {
-            $discount = Discount::where('id', $discount_id)->first();
-            if ($discount->value > 0) {
-                $discount_value = ($total_cost / 100) * $discount->value;
-                $total_cost = $total_cost - $discount_value;
+    }
+
+    /**
+     * Input: order id, discount id (or null)
+     * Output: mixed
+     * Description: Calculation total cost include discount if exist
+     */
+    public function calculate_cost(int $order_id, ?int $discount_id): mixed
+    {
+        try {
+            $total_cost = 0;
+            $products = OrderProduct::with('product')->where('order_id', $order_id)->get();
+            for ($i = 0; $i < count($products); $i++) {
+                $amount = $products[$i]['amount'];
+                $price = $products[$i]['product']['price'];
+                $total_cost = $total_cost + ($amount * $price);
+            }
+            if ($discount_id == NULL)
+                return $total_cost;
+            else {
+                $discount = Discount::where('id', $discount_id)->first();
+                if ($discount->value > 0) {
+                    $discount_value = ($total_cost / 100) * $discount->value;
+                    $total_cost = $total_cost - $discount_value;
+                    return $total_cost;
+                }
                 return $total_cost;
             }
-            return $total_cost;
+        } catch (Exception $e) {
+            return NULL;
         }
     }
 
-
-    public function addByAdmin($request, $restaurant_id, $user_id)
+    /**
+     * Input: request, restaurant id, user id
+     * Output: array or null
+     * Description: Checking if current user has permission to manage data for restaurant.
+     * If true getting checking if user exist and get his id or if doesn't exist create and get id. 
+     * After, adding order data, decode product json and adding their to order
+     */
+    public function addByAdmin(object $request, int $restaurant_id, int $user_id): ?array
     {
         try {
             if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
@@ -178,7 +198,7 @@ class Orders
                     $user_data = $user->addByAdmin($request->first_name, $request->phone_country_code, $request->phone_number);
                     if (isset($user_data->id))
                         $user_id = $user_data->id;
-                    else return 0;
+                    else return NULL;
                 }
                 $order = Order::create([
                     'user_id' => $user_id,
@@ -205,30 +225,48 @@ class Orders
                         'amount' => $value,
                     ]);
                 }
-                $total_cost = $this->calculate_cost($order->id, $request->discount);
+                $total_cost = $this->calculate_cost($order->id, $request->discount_id);
                 $order->update([
                     'total_cost' => $total_cost,
                 ]);
-                return ['order_id' => $order->id];
-            } else return 0;
+                if ($order->id) return ['order_id' => $order->id];
+                else return NULL;
+            } else return NULL;
         } catch (Exception $e) {
-            print($e);
+            return NULL;
         }
     }
 
-    public function updateStatus($request, $order_id, $restaurant_id, $user_id){
-        if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
-            $order = Order::findOrFail($order_id);
-            $order_data = $order->update([
-                'status_id' => $request->status_id,
-            ]);
-            if ($order_data != NULL)
-                return $order_data;
-            else return 0;
+    /**
+     * Input: request, order id, restaurant id, user id
+     * Output: boolean or null
+     * Description: Checking if current user has permission to manage data for restaurant.
+     * If true getting order object and update status
+     */
+    public function updateStatus(object $request, int $order_id, int $restaurant_id, int $user_id): ?bool
+    {
+        try {
+            if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
+                $order = Order::findOrFail($order_id);
+                $order_data = $order->update([
+                    'status_id' => $request->status_id,
+                ]);
+                if ($order_data != NULL) return $order_data;
+                else return NULL;
+            }
+        } catch (Exception $e) {
+            return NULL;
         }
     }
 
-    public function update($request, $order_id, $restaurant_id, $user_id)
+    /**
+     * Input: request, order id, restaurant id, user id
+     * Output: boolean or null
+     * Description: Checking if current user has permission to manage data for restaurant.
+     * If true getting checking if user exist and get his id or if doesn't exist create and get id. 
+     * After, adding order data, decode product json and adding their to order
+     */
+    public function update(object $request, int $order_id, int $restaurant_id, int $user_id): ?bool
     {
         try {
             if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
@@ -269,33 +307,46 @@ class Orders
                         'amount' => $value,
                     ]);
                 }
-                $total_cost = $this->calculate_cost($order->id, $request->discount);
+                $total_cost = $this->calculate_cost($order->id, $request->discount_id);
                 $order->update([
                     'total_cost' => $total_cost,
                 ]);
-                return ['updated' => $order_upd];
-            } else return 0;
+                if ($order_upd) return true;
+                else return NULL;
+            } else return NULL;
         } catch (Exception $e) {
-            print($e);
+            return NULL;
         }
     }
 
-    public function delete($order_id, $restaurant_id, $user_id)
+    /**
+     * Input: order id, restaurant id, user id
+     * Output: boolean or null
+     * Description: Checking if current user has permission to manage data for restaurant.
+     * If true checking order exist then doing cascade delete
+     */
+    public function delete(int $order_id, int $restaurant_id, int $user_id): ?bool
     {
         try {
             if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
                 $order = Order::findOrFail($order_id);
                 $order->order_products()->delete();
                 $order->order_address()->delete();
-                $order->delete();
-                return 1;
-            } else return 0;
+                $delete_result = $order->delete();
+                if ($delete_result) return true;
+                else return false;
+            } else return NULL;
         } catch (Exception $e) {
-            print($e);
+            return NULL;
         }
     }
 
-    public function add($request, $user_id)
+    /**
+     * Input: request, user id
+     * Output: array or null
+     * Description: adding order data, decode product json and adding their to order, calculate total cost and update data
+     */
+    public function add(object $request, int $user_id): ?array
     {
         try {
             $order = Order::create([
@@ -327,27 +378,42 @@ class Orders
             $order->update([
                 'total_cost' => $total_cost,
             ]);
-            return ['order_id' => $order->id];
+            if (isset($order->id)) return ['order_id' => $order->id];
+            else return NULL;
         } catch (Exception $e) {
-            print($e);
+            return NULL;
         }
     }
 
-    public function getCities()
+    /**
+     * Input: None
+     * Output: collection or null
+     * Description: Getting collection of cities available for delivery
+     */
+    public function getCities(): ?iterable
     {
-        $order_cities = OrderCity::all();
-        if ($this->check_result($order_cities))
-            return $order_cities;
-        else
-            return 0;
+        try {
+            $order_cities = OrderCity::all();
+            if ($this->check_result($order_cities)) return $order_cities;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
+        }
     }
 
-    public function getStreetTypes()
+    /**
+     * Input: 
+     * Output: collection or null
+     * Description: Getting collection of street types
+     */
+    public function getStreetTypes(): ?iterable
     {
-        $order_street_types = OrderStreetType::all();
-        if ($this->check_result($order_street_types))
-            return $order_street_types;
-        else
-            return 0;
+        try {
+            $order_street_types = OrderStreetType::all();
+            if ($this->check_result($order_street_types)) return $order_street_types;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
+        }
     }
 }

@@ -4,74 +4,108 @@ namespace App\Http\Classes;
 
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Http\Traits\ResultDataTrait;
+use Exception;
 
 class Products
 {
-    public function check_result($result)
-    {
-        if (json_encode($result) == "null")
-            return 0;
-        else
-            return 1;
-    }
+    use ResultDataTrait;
 
-    public function get($status = false)
+    /**
+     * Input: boolean or null
+     * Output: collection or null
+     * Description: Getting collection of products depends from optional param
+     */
+    public function get(?bool $status = false): ?iterable
     {
-        if ($status)
-            $products = Product::with('product_category')->where('available', $status)->get();
-        else
-            $products = Product::with('product_category')->get();
-        if (count($products) > 0)
-            return $products;
-        else return 0;
-    }
-
-    public function getById($id)
-    {
-        $product = Product::with('product_category')->where('id', $id)->first();
-        if ($this->check_result($product))
-            return $product;
-        else
-            return 0;
-    }
-
-    public function getByCategoryId($id, $status = false)
-    {
-        if ($status) {
-            $product = Product::with('product_category')
-                ->where('category_id', $id)
-                ->where('available', 1)->get();
-        } else {
-            $product = Product::with('product_category')
-                ->where('category_id', $id)->get();
+        try {
+            if ($status)
+                $products = Product::with('product_category')->where('available', $status)->get();
+            else
+                $products = Product::with('product_category')->get();
+            if (iterator_count($products) > 0)
+                return $products;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
         }
-        if ($this->check_result($product))
-            return $product;
-        else
-            return 0;
     }
 
-    public function getByRestaurantId($id, $status = false)
+    /**
+     * Input: product id
+     * Output: object or null
+     * Description: Getting collection of products depends from optional param
+     */
+    public function getById(int $id): ?object
     {
-        if ($status) {
-            $product = Product::with('product_category')
-                ->where('restaurant_id', $id)
-                ->where('available', 1)->get();
-        } else {
-            $product = Product::with('product_category')
-                ->where('restaurant_id', $id)->get();
+        try {
+            $product = Product::with('product_category')->where('id', $id)->first();
+            if ($this->check_result($product)) return $product;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
         }
-        if ($this->check_result($product))
-            return $product;
-        else
-            return 0;
     }
 
-    public function getCategories(){
-        $categories = ProductCategory::all();
-        if ($this->check_result($categories))
-            return $categories;
-        else
-            return 0;
+    /**
+     * Input: product id, boolean or null
+     * Output: collection or null
+     * Description: Getting collection of products by category id
+     */
+    public function getByCategoryId(int $id, ?bool $status = false): ?iterable
+    {
+        try {
+            if ($status) {
+                $products = Product::with('product_category')
+                    ->where('category_id', $id)
+                    ->where('available', 1)->get();
+            } else {
+                $products = Product::with('product_category')
+                    ->where('category_id', $id)->get();
+            }
+            if ($this->check_result($products)) return $products;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
+        }
+    }
+
+    /**
+     * Input: product id, boolean or null
+     * Output: collection or null
+     * Description: Getting collection of products by restaurant id
+     */
+    public function getByRestaurantId(int $id, ?bool $status = false): ?iterable
+    {
+        try {
+            if ($status) {
+                $products = Product::with('product_category')
+                    ->where('restaurant_id', $id)
+                    ->where('available', 1)->get();
+            } else {
+                $products = Product::with('product_category')
+                    ->where('restaurant_id', $id)->get();
+            }
+            if ($this->check_result($products)) return $products;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
+        }
+    }
+
+    /**
+     * Input: None
+     * Output: collection or null
+     * Description: Getting collection of product categories
+     */
+    public function getCategories(): ?iterable
+    {
+        try {
+            $categories = ProductCategory::all();
+            if ($this->check_result($categories)) return $categories;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
+        }
     }
 }

@@ -24,16 +24,15 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:2|max:50',
+            'name' => 'required|regex:/^[a-zA-Z0-9- ]+$/u|min:2|max:50',
             'working_time_start' => 'required|regex:/^[0-9:]+$/u|min:2|max:50',
             'working_time_end' => 'required|regex:/^[0-9:]+$/u|min:2|max:50',
             'working_day_start' => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:2|max:50',
             'working_day_end' => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:2|max:50',
             'description' => 'nullable|regex:/^[a-zA-Z0-9-]+$/u|min:2|max:2000',
-            'restaurant_id' => 'required|numeric|max:99999999',
-            'city_id' => 'required|numeric|max:99999999',
-            'street_type_id' => 'required|numeric|max:99999999',
-            'street_name' => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:2|max:50',
+            'city_id' => 'required|numeric|max:9999999999',
+            'street_type_id' => 'required|numeric|max:9999999999',
+            'street_name' => 'required|regex:/^[a-zA-Z0-9- ]+$/u|min:2|max:50',
             'building_number' => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:1|max:5',
         ];
     }

@@ -20,7 +20,7 @@ class RestaurantController extends BaseController
     public function index()
     {
         $result = $this->restaurants->getByUserId(Auth::user()->id);
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('RESTAURANT', $result);
         else
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
@@ -56,7 +56,7 @@ class RestaurantController extends BaseController
             return $this->sendError('RESTAURANT', 'UPDATE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
             $order = $this->restaurants->update($request, $id, Auth::user()->id);
-            if (isset($order) && $order != 0)
+            if (isset($order) && $order != NULL)
                 return $this->sendResponse('RESTAURANT', $order);
             else
                 return $this->sendError('RESTAURANT', 'FAILED_UPDATE_RESTAURANT');
@@ -75,7 +75,7 @@ class RestaurantController extends BaseController
     public function showDeliveryTypes(Request $request){
         $restaurant_id = intval($request->route('id_rest'));
         $result = $this->restaurants->getDeliveryTypes($restaurant_id);
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('DELIVERY_TYPE', $result);
         else
             return $this->sendError('DELIVERY_TYPE', 'RECORDS_NOT_FOUND');

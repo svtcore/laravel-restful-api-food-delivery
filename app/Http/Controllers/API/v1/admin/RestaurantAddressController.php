@@ -22,7 +22,7 @@ class RestaurantAddressController extends BaseController
     {
         $restaurant_id = intval($request->route('id_rest'));
         $result = $this->restaurants->getAddresses($restaurant_id);
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('RESTAURANT_ADDRESS', $result);
         else
             return $this->sendError('RESTAURANT_ADDRESS', 'RECORDS_NOT_FOUND');

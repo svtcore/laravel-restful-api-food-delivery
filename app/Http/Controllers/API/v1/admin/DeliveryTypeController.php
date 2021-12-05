@@ -40,7 +40,7 @@ class DeliveryTypeController extends BaseController
             return $this->sendError('DELIVERY_TYPE', 'STORE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
             $result = $this->delivery_types->add($request, $restaurant_id, Auth::user()->id);
-            if (isset($result) && $result != 0)
+            if (isset($result) && $result != NULL)
                 return $this->sendResponse('DELIVERY_TYPE', $result);
             else
                 return $this->sendError('DELIVERY_TYPE', 'FAILED_STORE_RESTAURANT');

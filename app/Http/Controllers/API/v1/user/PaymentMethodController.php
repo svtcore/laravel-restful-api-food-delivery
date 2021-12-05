@@ -32,7 +32,7 @@ class PaymentMethodController extends BaseController
                 else $status = true;
             else $status = false;
             $payments = $this->payments->get($status);
-            if (count($payments) > 0)
+            if (iterator_count($payments) > 0)
                 return $this->sendResponse('PAYMENT_METHOD', $payments);
             else
                 return $this->sendError('PAYMENT_METHOD', 'FAILED_GET_PAYMENT_METHODS');

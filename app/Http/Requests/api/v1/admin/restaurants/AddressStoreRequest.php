@@ -24,10 +24,9 @@ class AddressStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'restaurant_id' => 'required|numeric|max:99999999',
-            'city_id' => 'required|numeric|max:99999999',
-            'street_type_id' => 'required|numeric|max:99999999',
-            'street_name' => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:2|max:50',
+            'city_id' => 'required|numeric|max:9999999999',
+            'street_type_id' => 'required|numeric|max:9999999999',
+            'street_name' => 'required|regex:/^[a-zA-Z0-9- ]+$/u|min:2|max:50',
             'building_number' => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:1|max:5',
         ];
     }

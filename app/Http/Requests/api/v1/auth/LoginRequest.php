@@ -26,7 +26,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => 'required|email',
             'password' => 'required|string|regex:/^[a-zA-Z0-9@$!%*\/#?&.]+$/u|min:8|max:100',
-            "client_id"     => 'required|numeric|max:99999999',
+            "client_id"     => 'required|numeric|max:9999999999',
             "client_secret" => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:4|max:15',
         ];
     }

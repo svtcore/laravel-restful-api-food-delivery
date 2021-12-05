@@ -22,7 +22,7 @@ class DiscountController extends BaseController
     public function index()
     {
         $result = $this->discounts->getAvailable();
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('DISCOUNT', $result);
         else
             return $this->sendError('DISCOUNT', 'RECORD_NOT_FOUND');

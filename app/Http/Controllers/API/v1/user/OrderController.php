@@ -24,7 +24,7 @@ class OrderController extends BaseController
     public function index()
     {
         $result = $this->orders->getPersonal(Auth::user()->id);
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('ORDER', $result);
         else
             return $this->sendError('ORDER', 'RECORDS_NOT_FOUND');
@@ -68,7 +68,7 @@ class OrderController extends BaseController
     public function showCitiesList()
     {
         $result = $this->orders->getCities();
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('ORDER_CITY', $result);
         else
             return $this->sendError('ORDER_CITY', 'RECORDS_NOT_FOUND');
@@ -77,7 +77,7 @@ class OrderController extends BaseController
     public function showStreetTypesList()
     {
         $result = $this->orders->getStreetTypes();
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('ORDER_STREET_TYPE', $result);
         else
             return $this->sendError('ORDER_STREET_TYPE', 'RECORDS_NOT_FOUND');

@@ -26,7 +26,7 @@ class OrderController extends BaseController
     public function index(Request $request){
         $restaurant_id = intval($request->route('id_rest'));
         $result = $this->orders->getByRestaurantId($restaurant_id, Auth::user()->id);
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('ORDER', $result);
         else
             return $this->sendError('ORDER', 'RECORD_NOT_FOUND');
@@ -131,7 +131,7 @@ class OrderController extends BaseController
         $restaurant_id = intval($request->route('id_rest'));
         $status_id = intval($request->route('id'));
         $result = $this->orders->getByStatusId($status_id, $restaurant_id, Auth::user()->id);
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('ORDER', $result);
         else
             return $this->sendError('ORDER', 'RECORD_NOT_FOUND');

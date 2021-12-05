@@ -24,7 +24,7 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'available' => 'required|boolean',
+            'available' => 'nullable|boolean',
         ];
     }
 }

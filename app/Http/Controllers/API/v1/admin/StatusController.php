@@ -21,7 +21,7 @@ class StatusController extends BaseController
     public function index()
     {
         $result = $this->statuses->get();
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('ORDER_STATUS', $result);
         else
             return $this->sendError('ORDER_STATUS', 'RECORDS_NOT_FOUND');

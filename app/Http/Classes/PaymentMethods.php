@@ -3,34 +3,45 @@
 namespace App\Http\Classes;
 
 use App\Models\PaymentMethod;
+use Exception;
+use App\Http\Traits\ResultDataTrait;
 
 class PaymentMethods
 {
-    public function check_result($result)
+    use ResultDataTrait;
+
+    /**
+     * Input: status or null
+     * Output: collection or null
+     * Description: Getting collection of payment methods with optional param "available"
+     */
+    public function get(?bool $status = false): ?iterable
     {
-        if (json_encode($result) == "null")
-            return 0;
-        else
-            return 1;
+        try {
+            if ($status)
+                $payments = PaymentMethod::where('available', $status)->get();
+            else
+                $payments = PaymentMethod::all();
+            if (iterator_count($payments) > 0) return $payments;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
+        }
     }
 
-    public function get($status = false)
+    /**
+     * Input: payment type id
+     * Output: object
+     * Description: Getting object of payment method by id
+     */
+    public function getById(int $id): ?object
     {
-        if ($status)
-            $payments = PaymentMethod::where('available', $status)->get();
-        else
-            $payments = PaymentMethod::all();
-        if (count($payments) > 0)
-            return $payments;
-        else return 0;
-    }
-
-    public function getById($id)
-    {
-        $payment = PaymentMethod::where('id', $id)->first();
-        if ($this->check_result($payment))
-            return $payment;
-        else
-            return 0;
+        try {
+            $payment = PaymentMethod::where('id', $id)->first();
+            if ($this->check_result($payment)) return $payment;
+            else return NULL;
+        } catch (Exception $e) {
+            return NULL;
+        }
     }
 }

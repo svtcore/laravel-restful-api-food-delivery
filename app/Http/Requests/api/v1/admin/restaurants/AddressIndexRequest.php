@@ -24,7 +24,7 @@ class AddressIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'restaurant_id' => 'required|numeric|max:99999999',
+            'restaurant_id' => 'required|numeric|max:9999999999',
         ];
     }
 }

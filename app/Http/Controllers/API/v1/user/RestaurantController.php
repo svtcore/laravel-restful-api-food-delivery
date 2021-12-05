@@ -27,7 +27,7 @@ class RestaurantController extends BaseController
     public function index()
     {
         $result = $this->restaurants->get();
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('RESTAURANT', $result);
         else
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
@@ -49,7 +49,7 @@ class RestaurantController extends BaseController
             return $this->sendError('RESTAURANT', 'SEARCH_VALIDATION_EXCEPTION', $validation->errors());
         } else {
             $result = $this->restaurants->search($request->key);
-            if (count($result) > 0)
+            if (iterator_count($result) > 0)
                 return $this->sendResponse('RESTAURANT', $result);
             else
                 return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
@@ -59,7 +59,7 @@ class RestaurantController extends BaseController
     public function showByCategoryId($id)
     {
         $result = $this->restaurants->getByProductCategoryId($id);
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('RESTAURANT', $result);
         else
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
@@ -68,7 +68,7 @@ class RestaurantController extends BaseController
     public function showByCityId($id)
     {
         $result = $this->restaurants->getByCityId($id);
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('RESTAURANT', $result);
         else
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
@@ -77,7 +77,7 @@ class RestaurantController extends BaseController
     public function showByProductId($id)
     {
         $result = $this->restaurants->getByProductId($id);
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('RESTAURANT', $result);
         else
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
@@ -86,7 +86,7 @@ class RestaurantController extends BaseController
     public function showCitiesList()
     {
         $result = $this->restaurants->getCities();
-        if (count($result) > 0)
+        if (iterator_count($result) > 0)
             return $this->sendResponse('RESTAURANT_CITY', $result);
         else
             return $this->sendError('RESTAURANT_CITY', 'RECORDS_NOT_FOUND');
