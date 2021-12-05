@@ -105,6 +105,7 @@ Route::prefix('v1')->group(function () {
               Route::delete('/{id}', 'OrderController@destroy');
             });
           });
+          Route::get('/discounts', 'DiscountController@index')->name('admin.discounts.index');
           Route::get('/', 'RestaurantController@index')->name('admin.restaurant.index');
           Route::post('/', 'RestaurantController@store')->name('admin.restaurant.store');
           Route::put('/{id}', 'RestaurantController@update')->name('admin.restaurant.update');

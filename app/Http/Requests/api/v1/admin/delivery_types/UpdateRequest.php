@@ -24,9 +24,9 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => '',
-            'price' => '',
-            'available' => '',
+            'name' => 'required|regex:/^[a-zA-Z0-9]+$/u|min:4|max:15',
+            'price' => 'required|numeric|between:0.00,9999.99',
+            'available' => 'required|boolean',
         ];
     }
 }

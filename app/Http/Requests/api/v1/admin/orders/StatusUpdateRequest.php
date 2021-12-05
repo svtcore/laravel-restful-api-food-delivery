@@ -24,7 +24,7 @@ class StatusUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'status_id' => 'required'
+            'status_id' => 'required|numeric|max:99999999',
         ];
     }
 }

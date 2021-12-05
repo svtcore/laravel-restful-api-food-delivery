@@ -24,7 +24,7 @@ class RestaurantRequest extends FormRequest
     public function rules()
     {
         return [
-            'available' => 'nullable'
+            'available' => 'required|boolean',
         ];
     }
 }

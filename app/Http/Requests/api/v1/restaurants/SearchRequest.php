@@ -24,7 +24,7 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'key' => 'required',
+            'key' => 'required|regex:/^[a-zA-Z0-9.,-]+$/u|min:4|max:15',
         ];
     }
 }
