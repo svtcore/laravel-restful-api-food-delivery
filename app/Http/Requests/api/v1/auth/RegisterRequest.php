@@ -28,7 +28,6 @@ class RegisterRequest extends FormRequest
             'last_name' => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:2|max:50',
             'phone_country_code' => 'required|numeric|max:9999999999',
             'phone_number' => 'required|numeric|max:9999999999',
-            'email' => 'required|email',
             'password' => 'required|string|regex:/^[a-zA-Z0-9@$!%*\/#?&.]+$/u|min:8|max:100',
         ];
     }

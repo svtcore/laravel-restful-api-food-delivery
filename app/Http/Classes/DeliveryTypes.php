@@ -6,6 +6,7 @@ use App\Models\DeliveryType;
 use Exception;
 use App\Http\Classes\Restaurants;
 use App\Http\Traits\ResultDataTrait;
+use Illuminate\Http\Request;
 
 class DeliveryTypes
 {
@@ -19,8 +20,8 @@ class DeliveryTypes
     }
 
     /**
-     * Input: restaurant id
-     * Output: collection of delivery types or NULL
+     * @param int $id
+     * @return Collection
      * Description: Getting collection of delivery types
      */
     public function getByRestaurantId(int $id): ?iterable
@@ -37,8 +38,8 @@ class DeliveryTypes
     }
 
     /**
-     * Input: delivery type id
-     * Output: collection or null
+     * @param int $id
+     * @return Collection
      * Description: Getting object of delivery type by id
      */
     public function getById(int $id): ?object
@@ -55,17 +56,17 @@ class DeliveryTypes
     }
 
     /**
-     * Input: request data, restaurand id, user id
-     * Output: array or null
+     * @param object $request, int user_id
+     * @return array
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true then add data of delivery type
      */
-    public function add(object $request, int $restaurant_id, int $user_id): ?array
+    public function add(object $request, int $user_id): ?array
     {
         try {
-            if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
+            if ($this->check_restaurant_access($user_id, $request->restaurant_id, NULL)) {
                 $delivery_type = DeliveryType::create([
-                    'restaurant_id' => $restaurant_id,
+                    'restaurant_id' => $request->restaurant_id,
                     'name' => $request->name,
                     'price' => $request->price,
                     'available' => $request->available,
@@ -80,18 +81,18 @@ class DeliveryTypes
     }
 
     /**
-     * Input: request data, delivery type id, restaurant id, user id
-     * Output: boolean or null
+     * @param object $request, int $user id
+     * @return bool
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true then update delivery type data
      */
-    public function update(object $request, int $id, int $restaurant_id, int $user_id): ?bool
+    public function update(object $request, int $user_id): ?bool
     {
         try {
-            if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
-                $update_result = DeliveryType::where('id', $id)->update(
+            if ($this->check_restaurant_access($user_id, $request->restaurant_id, NULL)) {
+                $update_result = DeliveryType::where('id', $request->delivery_type_id)->update(
                     [
-                        'restaurant_id' => $restaurant_id,
+                        'restaurant_id' => $request->restaurant_id,
                         'name' => $request->name,
                         'price' => floatval($request->price),
                         'available' => intval($request->available),
@@ -106,16 +107,16 @@ class DeliveryTypes
     }
 
     /**
-     * Input: delivery type id, restaurant id, user id
-     * Output: boolean or null
+     * @param object $request, int $user id
+     * @return bool
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true then add delete record
      */
-    public function delete(int $id, int $restaurant_id, int $user_id): ?bool
+    public function delete(object $request, int $user_id): ?bool
     {
         try {
-            if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
-                $delivery_type = DeliveryType::findOrFail($id);
+            if ($this->check_restaurant_access($user_id, $request->restaurant_id, NULL)) {
+                $delivery_type = DeliveryType::findOrFail($request->delivery_type_id);
                 $delete_result = $delivery_type->delete();
                 if ($delete_result) return true;
                 else return false;

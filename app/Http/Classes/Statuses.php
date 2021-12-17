@@ -9,8 +9,8 @@ class Statuses
 {
 
     /**
-     * Input: None
-     * Output: collection or null
+     * @param null
+     * @return Collection
      * Description: Getting collection of order statuses
      */
     public function get(): ?iterable

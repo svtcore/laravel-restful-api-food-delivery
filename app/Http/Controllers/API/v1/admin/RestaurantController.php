@@ -51,11 +51,12 @@ class RestaurantController extends BaseController
 
     public function update(Request $request, $id)
     {
+        $request->query->set('restaurant_id', $id);
         $validation = Validator::make($request->all(), (new UpdateRequest)->rules());
         if ($validation->fails()) {
             return $this->sendError('RESTAURANT', 'UPDATE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
-            $order = $this->restaurants->update($request, $id, Auth::user()->id);
+            $order = $this->restaurants->update($request, Auth::user()->id);
             if (isset($order) && $order != NULL)
                 return $this->sendResponse('RESTAURANT', $order);
             else
@@ -72,9 +73,8 @@ class RestaurantController extends BaseController
             return $this->sendError('RESTAURANT', 'FAILED_DELETE_RESTAURANT');
     }
 
-    public function showDeliveryTypes(Request $request){
-        $restaurant_id = intval($request->route('id_rest'));
-        $result = $this->restaurants->getDeliveryTypes($restaurant_id);
+    public function showDeliveryTypes($id){
+        $result = $this->restaurants->getDeliveryTypes($id);
         if (iterator_count($result) > 0)
             return $this->sendResponse('DELIVERY_TYPE', $result);
         else

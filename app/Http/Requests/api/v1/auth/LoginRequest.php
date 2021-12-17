@@ -24,10 +24,11 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email',
+            'phone_country_code' => 'required|numeric|max:9999999999',
+            'phone_number' => 'required|numeric|max:9999999999',
             'password' => 'required|string|regex:/^[a-zA-Z0-9@$!%*\/#?&.]+$/u|min:8|max:100',
             "client_id"     => 'required|numeric|max:9999999999',
-            "client_secret" => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:4|max:15',
+            "client_secret" => 'required|regex:/^[a-zA-Z0-9-]+$/u|min:4|max:100',
         ];
     }
 }

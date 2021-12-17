@@ -8,11 +8,21 @@ use Exception;
 
 class Users
 {
+    /**
+     * @param int $id
+     * @return json
+     * Description: Getting user data by id
+     */
     public function getById(int $id): string
     {
         return json_decode(User::findOrFail($id)->first());
     }
 
+    /**
+     * @param int $id
+     * @return object
+     * Description: Getting user data by phone number
+     */
     public function getByPhoneNumber(int $phone): ?object
     {
         try {
@@ -25,6 +35,11 @@ class Users
         }
     }
 
+    /**
+     * @param string $first_name, int $country_code, int $phone_number
+     * @return json
+     * Description: Getting user data by id
+     */
     public function addByAdmin(string $first_name, int $country_code, int $phone_number): ?object
     {
         try {

@@ -11,8 +11,8 @@ class PaymentMethods
     use ResultDataTrait;
 
     /**
-     * Input: status or null
-     * Output: collection or null
+     * @param bool $status
+     * @return Collection
      * Description: Getting collection of payment methods with optional param "available"
      */
     public function get(?bool $status = false): ?iterable
@@ -30,8 +30,8 @@ class PaymentMethods
     }
 
     /**
-     * Input: payment type id
-     * Output: object
+     * @param int $id
+     * @return object
      * Description: Getting object of payment method by id
      */
     public function getById(int $id): ?object

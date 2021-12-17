@@ -48,6 +48,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function findForPassport($username) {
+        $data = explode("_", $username);
+        return $this->where('phone_number', intval($data[1]))->where('phone_country_code', intval($data[0]))->first();
+    }
+
     public function orders() {
         return $this->hasMany(Order::class);
     }

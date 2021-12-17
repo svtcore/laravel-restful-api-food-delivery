@@ -15,8 +15,8 @@ class Orders
     use ResultDataTrait;
 
     /**
-     * Input: status id, restaurant id, user id
-     * Output: collection of orders
+     * @param int $status_id, int $restaurant_id, int $user_id
+     * @return Collection
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true getting collection by params: restaurant, status
      */
@@ -41,8 +41,8 @@ class Orders
     }
 
     /**
-     * Input: restaurant id, user id
-     * Output: collection
+     * @param int $restaurant_id, int user_id
+     * @return Collection
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true getting orders by param restaurant id
      */
@@ -66,8 +66,8 @@ class Orders
     }
 
     /**
-     * Input: user id
-     * Output: collection
+     * @param int $user_id
+     * @return Collection
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true getting orders which belong to current user
      */
@@ -92,8 +92,8 @@ class Orders
     }
 
     /**
-     * Input: order id, restaurant id, user id
-     * Output: object
+     * @param int $id, int $restaurant_id, int $user_id
+     * @return object
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true getting object of order by id
      */
@@ -120,8 +120,8 @@ class Orders
     }
 
     /**
-     * Input: order id, user id
-     * Output: object
+     * @param int $id, int $user_id
+     * @return object
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true getting orders by params order id and user id to avoid that another user can not get 
      * order data of another user
@@ -149,8 +149,8 @@ class Orders
     }
 
     /**
-     * Input: order id, discount id (or null)
-     * Output: mixed
+     * @param int $order_id, int $discount_id
+     * @return mixed
      * Description: Calculation total cost include discount if exist
      */
     public function calculate_cost(int $order_id, ?int $discount_id): mixed
@@ -180,16 +180,16 @@ class Orders
     }
 
     /**
-     * Input: request, restaurant id, user id
-     * Output: array or null
+     * @param object $request, int $user_id
+     * @return array
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true getting checking if user exist and get his id or if doesn't exist create and get id. 
      * After, adding order data, decode product json and adding their to order
      */
-    public function addByAdmin(object $request, int $restaurant_id, int $user_id): ?array
+    public function addByAdmin(object $request, int $user_id): ?array
     {
         try {
-            if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
+            if ($this->check_restaurant_access($user_id, $request->restaurant_id, NULL)) {
                 $user = new Users();
                 $user_data = $user->getByPhoneNumber($request->phone_number);
                 if ($user_data != NULL)
@@ -238,16 +238,16 @@ class Orders
     }
 
     /**
-     * Input: request, order id, restaurant id, user id
-     * Output: boolean or null
+     * @param object $request, int $user_id
+     * @return bool
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true getting order object and update status
      */
-    public function updateStatus(object $request, int $order_id, int $restaurant_id, int $user_id): ?bool
+    public function updateStatus(object $request, int $user_id): ?bool
     {
         try {
-            if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
-                $order = Order::findOrFail($order_id);
+            if ($this->check_restaurant_access($user_id, $request->restaurant_id, NULL)) {
+                $order = Order::findOrFail($request->order_id);
                 $order_data = $order->update([
                     'status_id' => $request->status_id,
                 ]);
@@ -260,16 +260,16 @@ class Orders
     }
 
     /**
-     * Input: request, order id, restaurant id, user id
-     * Output: boolean or null
+     * @param request, order id, restaurant id, user id
+     * @return bool
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true getting checking if user exist and get his id or if doesn't exist create and get id. 
      * After, adding order data, decode product json and adding their to order
      */
-    public function update(object $request, int $order_id, int $restaurant_id, int $user_id): ?bool
+    public function update(object $request, int $user_id): ?bool
     {
         try {
-            if ($this->check_restaurant_access($user_id, $restaurant_id, NULL)) {
+            if ($this->check_restaurant_access($user_id, $request->restaurant_id, NULL)) {
                 $user = new Users();
                 $user_data = $user->getByPhoneNumber($request->phone_number);
                 if ($user_data != NULL)
@@ -280,7 +280,7 @@ class Orders
                         $user_id = $user_data->id;
                     else return 0;
                 }
-                $order = Order::findOrFail($order_id);
+                $order = Order::findOrFail($request->order_id);
                 $order_upd = $order->update([
                     'user_id' => $user_id,
                     'payment_type_id' => $request->payment_type_id,
@@ -320,8 +320,8 @@ class Orders
     }
 
     /**
-     * Input: order id, restaurant id, user id
-     * Output: boolean or null
+     * @param object $order_id, int $restaurant_id, int $user_id
+     * @return bool
      * Description: Checking if current user has permission to manage data for restaurant.
      * If true checking order exist then doing cascade delete
      */
@@ -342,8 +342,8 @@ class Orders
     }
 
     /**
-     * Input: request, user id
-     * Output: array or null
+     * @param object $request, int user_id
+     * @return array
      * Description: adding order data, decode product json and adding their to order, calculate total cost and update data
      */
     public function add(object $request, int $user_id): ?array
@@ -386,8 +386,8 @@ class Orders
     }
 
     /**
-     * Input: None
-     * Output: collection or null
+     * @param null
+     * @return Collection
      * Description: Getting collection of cities available for delivery
      */
     public function getCities(): ?iterable
@@ -402,8 +402,8 @@ class Orders
     }
 
     /**
-     * Input: 
-     * Output: collection or null
+     * @param null
+     * @return Collection
      * Description: Getting collection of street types
      */
     public function getStreetTypes(): ?iterable

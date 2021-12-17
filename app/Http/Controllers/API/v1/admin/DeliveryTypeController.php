@@ -17,14 +17,7 @@ class DeliveryTypeController extends BaseController
         $this->delivery_types = new DeliveryTypes();
     }
 
-    public function index(Request $request, $id)
-    {
-        //
-    }
-
-
-    public function show(Request $request){
-        $delivery_type_id = intval($request->route('id'));
+    public function show($restaurant_id, $delivery_type_id){
         $result = $this->delivery_types->getById($delivery_type_id);
         if (isset($result))
             return $this->sendResponse('DELIVERY_TYPE', $result);
@@ -32,14 +25,14 @@ class DeliveryTypeController extends BaseController
             return $this->sendError('DELIVERY_TYPE', 'RECORD_NOT_FOUND');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $restaurant_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
+        $request->query->set('restaurant_id', $restaurant_id);
         $validation = Validator::make($request->all(), (new StoreRequest)->rules());
         if ($validation->fails()) {
             return $this->sendError('DELIVERY_TYPE', 'STORE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
-            $result = $this->delivery_types->add($request, $restaurant_id, Auth::user()->id);
+            $result = $this->delivery_types->add($request, Auth::user()->id);
             if (isset($result) && $result != NULL)
                 return $this->sendResponse('DELIVERY_TYPE', $result);
             else
@@ -47,15 +40,15 @@ class DeliveryTypeController extends BaseController
         }
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $restaurant_id, $delivery_type_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
-        $delivery_type_id = intval($request->route('id'));
+        $request->query->set('restaurant_id', $restaurant_id);
+        $request->query->set('delivery_type_id', $delivery_type_id);
         $validation = Validator::make($request->all(), (new UpdateRequest)->rules());
         if ($validation->fails()) {
             return $this->sendError('DELIVERY_TYPE', 'UPDATE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
-            $result = $this->delivery_types->update($request, $delivery_type_id, $restaurant_id, Auth::user()->id);
+            $result = $this->delivery_types->update($request, Auth::user()->id);
             if (isset($result) && $result != 0)
                 return $this->sendResponse('DELIVERY_TYPE', $result);
             else
@@ -63,11 +56,11 @@ class DeliveryTypeController extends BaseController
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, $restaurant_id, $delivery_type_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
-        $delivery_type_id = intval($request->route('id'));
-        $result = $this->delivery_types->delete(intval($delivery_type_id), intval($restaurant_id), Auth::user()->id);
+        $request->query->set('restaurant_id', $restaurant_id);
+        $request->query->set('delivery_type_id', $delivery_type_id);
+        $result = $this->delivery_types->delete($request, Auth::user()->id);
         if ($result)
             return $this->sendResponse('DELIVERY_TYPE', $result);
         else

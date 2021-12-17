@@ -18,9 +18,8 @@ class RestaurantAddressController extends BaseController
         $this->restaurants = new Restaurants();
     }
 
-    public function index(Request $request)
+    public function index($restaurant_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
         $result = $this->restaurants->getAddresses($restaurant_id);
         if (iterator_count($result) > 0)
             return $this->sendResponse('RESTAURANT_ADDRESS', $result);
@@ -28,10 +27,8 @@ class RestaurantAddressController extends BaseController
             return $this->sendError('RESTAURANT_ADDRESS', 'RECORDS_NOT_FOUND');
     }
 
-    public function show(Request $request)
+    public function show($restaurant_id, $address_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
-        $address_id = intval($request->route('id'));
         $result = $this->restaurants->getAddressById($restaurant_id, $address_id, Auth::user()->id);
         if (isset($result->id))
             return $this->sendResponse('RESTAURANT_ADDRESS', $result);
@@ -39,14 +36,14 @@ class RestaurantAddressController extends BaseController
             return $this->sendError('RESTAURANT_ADDRESS', 'RECORD_NOT_FOUND');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $restaurant_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
+        $request->query->set('restaurant_id', $restaurant_id);
         $validation = Validator::make($request->all(), (new AddressStoreRequest)->rules());
         if ($validation->fails()) {
             return $this->sendError('RESTAURANT_ADDRESS', 'STORE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
-            $restaurant = $this->restaurants->addAddress($request, $restaurant_id, Auth::user()->id);
+            $restaurant = $this->restaurants->addAddress($request, Auth::user()->id);
             if (isset($restaurant) && $restaurant != 0)
                 return $this->sendResponse('RESTAURANT_ADDRESS', $restaurant);
             else
@@ -54,15 +51,15 @@ class RestaurantAddressController extends BaseController
         }
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $restaurant_id, $address_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
-        $address_id = intval($request->route('id'));
+        $request->query->set('restaurant_id', $restaurant_id);
+        $request->query->set('address_id', $address_id);
         $validation = Validator::make($request->all(), (new AddressStoreRequest)->rules());
         if ($validation->fails()) {
             return $this->sendError('RESTAURANT_ADDRESS', 'UPDATE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
-            $restaurant = $this->restaurants->updateAddress($request, $restaurant_id, $address_id, Auth::user()->id);
+            $restaurant = $this->restaurants->updateAddress($request, Auth::user()->id);
             if (isset($restaurant))
                 return $this->sendResponse('RESTAURANT_ADDRESS', $restaurant);
             else
@@ -70,11 +67,11 @@ class RestaurantAddressController extends BaseController
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, $restaurant_id, $address_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
-        $address_id = intval($request->route('id'));
-        $result = $this->restaurants->deleteAddress($request, $restaurant_id,  $address_id, Auth::user()->id);
+        $request->query->set('restaurant_id', $restaurant_id);
+        $request->query->set('address_id', $address_id);
+        $result = $this->restaurants->deleteAddress($request, Auth::user()->id);
         if ($result)
             return $this->sendResponse('RESTAURANT_ADDRESS', $result);
         else

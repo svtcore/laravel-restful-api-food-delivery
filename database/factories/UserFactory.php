@@ -19,7 +19,6 @@ class UserFactory extends Factory
             'last_name' => $this->faker->lastName,
             'phone_country_code' => 380,
             'phone_number' => rand(111111111, 999999999),
-            'email' => $this->faker->email,
             'password' => bcrypt('password'),
             'state' => $this->faker->randomElement($array = array ('active','banned')),
         ];

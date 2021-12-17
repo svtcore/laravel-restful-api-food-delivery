@@ -23,8 +23,7 @@ class OrderController extends BaseController
         $this->orders = new Orders();
     }
 
-    public function index(Request $request){
-        $restaurant_id = intval($request->route('id_rest'));
+    public function index($restaurant_id){
         $result = $this->orders->getByRestaurantId($restaurant_id, Auth::user()->id);
         if (iterator_count($result) > 0)
             return $this->sendResponse('ORDER', $result);
@@ -38,14 +37,14 @@ class OrderController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $restaurant_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
+        $request->query->set('restaurant_id', $restaurant_id);
         $validation = Validator::make($request->all(), (new StoreRequest)->rules());
         if ($validation->fails()) {
             return $this->sendError('ORDER', 'ORDER_STORE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
-            $order = $this->orders->addByAdmin($request, $restaurant_id, Auth::user()->id);
+            $order = $this->orders->addByAdmin($request, Auth::user()->id);
             if (isset($order))
                 return $this->sendResponse('ORDER', $order);
             else
@@ -59,10 +58,8 @@ class OrderController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($restaurant_id, $order_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
-        $order_id = intval($request->route('id'));
         $result = $this->orders->getById($order_id, $restaurant_id, Auth::user()->id);
         if (isset($result->id))
             return $this->sendResponse('ORDER', $result);
@@ -77,15 +74,15 @@ class OrderController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $restaurant_id, $order_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
-        $order_id = intval($request->route('id'));
+        $request->query->set('restaurant_id', $restaurant_id);
+        $request->query->set('order_id', $order_id);
         $validation = Validator::make($request->all(), (new UpdateRequest)->rules());
         if ($validation->fails()) {
             return $this->sendError('ORDER', 'ORDER_UPDATE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
-            $order = $this->orders->update($request, $order_id, $restaurant_id, Auth::user()->id);
+            $order = $this->orders->update($request, Auth::user()->id);
             if (isset($order))
                 return $this->sendResponse('ORDER', $order);
             else
@@ -93,15 +90,15 @@ class OrderController extends BaseController
         }
     }
 
-    public function updateByStatus(Request $request)
+    public function updateByStatus(Request $request, $restaurant_id, $order_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
-        $order_id = intval($request->route('id'));
+        $request->query->set('restaurant_id', $restaurant_id);
+        $request->query->set('order_id', $order_id);
         $validation = Validator::make($request->all(), (new StatusUpdateRequest)->rules());
         if ($validation->fails()) {
             return $this->sendError('ORDER', 'ORDER_UPDATE_VALIDATION_EXCEPTION', $validation->errors());
         } else {
-            $order = $this->orders->updateStatus($request, $order_id, $restaurant_id, Auth::user()->id);
+            $order = $this->orders->updateStatus($request, Auth::user()->id);
             if (isset($order))
                 return $this->sendResponse('ORDER', $order);
             else
@@ -115,10 +112,8 @@ class OrderController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($restaurant_id, $order_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
-        $order_id = intval($request->route('id'));
         $result = $this->orders->delete($order_id, $restaurant_id, Auth::user()->id);
         if ($result)
             return $this->sendResponse('ORDER', $result);
@@ -126,10 +121,8 @@ class OrderController extends BaseController
             return $this->sendError('ORDER', 'FAILED_DELETE');
     }
 
-    public function showByStatus(Request $request)
+    public function showByStatus($restaurant_id, $status_id)
     {
-        $restaurant_id = intval($request->route('id_rest'));
-        $status_id = intval($request->route('id'));
         $result = $this->orders->getByStatusId($status_id, $restaurant_id, Auth::user()->id);
         if (iterator_count($result) > 0)
             return $this->sendResponse('ORDER', $result);

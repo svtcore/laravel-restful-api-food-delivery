@@ -12,8 +12,8 @@ class Products
     use ResultDataTrait;
 
     /**
-     * Input: boolean or null
-     * Output: collection or null
+     * @param bool
+     * @return Collection
      * Description: Getting collection of products depends from optional param
      */
     public function get(?bool $status = false): ?iterable
@@ -32,8 +32,8 @@ class Products
     }
 
     /**
-     * Input: product id
-     * Output: object or null
+     * @param int $product_id
+     * @return object
      * Description: Getting collection of products depends from optional param
      */
     public function getById(int $id): ?object
@@ -48,8 +48,8 @@ class Products
     }
 
     /**
-     * Input: product id, boolean or null
-     * Output: collection or null
+     * @param int $product_id, bool $status
+     * @return Collection
      * Description: Getting collection of products by category id
      */
     public function getByCategoryId(int $id, ?bool $status = false): ?iterable
@@ -71,8 +71,8 @@ class Products
     }
 
     /**
-     * Input: product id, boolean or null
-     * Output: collection or null
+     * @param int $product_id, bool $status
+     * @return Collection
      * Description: Getting collection of products by restaurant id
      */
     public function getByRestaurantId(int $id, ?bool $status = false): ?iterable
@@ -94,8 +94,8 @@ class Products
     }
 
     /**
-     * Input: None
-     * Output: collection or null
+     * @param null
+     * @return Collection
      * Description: Getting collection of product categories
      */
     public function getCategories(): ?iterable

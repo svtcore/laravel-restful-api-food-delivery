@@ -11,8 +11,8 @@ class UserAuth
 {
 
     /**
-     * Input: request
-     * Output: json response
+     * @param object $request
+     * @return json
      * Description: Checking input data if they are correct return user data and access token
      */
     public function login(object $request)
@@ -20,7 +20,7 @@ class UserAuth
         try {
             $request->request->add([
                 "grant_type" => "password",
-                "username" => $request->email,
+                "username" => $request->phone_country_code."_".$request->phone_number,
                 "password" => $request->password,
                 "client_id"     => $request->client_id,
                 "client_secret" => $request->client_secret,
@@ -38,8 +38,8 @@ class UserAuth
     }
 
     /**
-     * Input: request
-     * Output: json response
+     * @param object $request
+     * @return json
      * Description: Create user and give him user role
      */
     public function register(object $request)
