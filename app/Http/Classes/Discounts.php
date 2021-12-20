@@ -11,9 +11,11 @@ class Discounts
     use ResultDataTrait;
 
     /**
+     * Getting available not expired discounts collection
+     * 
      * @param null
      * @return Collection
-     * Description: Getting available not expired discounts collection
+     * 
      */
     public function getAvailable(): ?iterable
     {

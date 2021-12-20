@@ -11,9 +11,11 @@ class UserAuth
 {
 
     /**
+     * Checking input data if they are correct return user data and access token
+     * 
      * @param object $request
      * @return json
-     * Description: Checking input data if they are correct return user data and access token
+     * 
      */
     public function login(object $request)
     {
@@ -38,9 +40,11 @@ class UserAuth
     }
 
     /**
+     * Create user and give him user role
+     * 
      * @param object $request
      * @return json
-     * Description: Create user and give him user role
+     * 
      */
     public function register(object $request)
     {

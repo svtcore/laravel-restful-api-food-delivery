@@ -20,9 +20,11 @@ class DeliveryTypes
     }
 
     /**
+     * Getting collection of delivery types
+     * 
      * @param int $id
      * @return Collection
-     * Description: Getting collection of delivery types
+     * 
      */
     public function getByRestaurantId(int $id): ?iterable
     {
@@ -38,9 +40,11 @@ class DeliveryTypes
     }
 
     /**
+     * Getting object of delivery type by id
+     * 
      * @param int $id
      * @return Collection
-     * Description: Getting object of delivery type by id
+     * 
      */
     public function getById(int $id): ?object
     {
@@ -56,10 +60,12 @@ class DeliveryTypes
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true then add data of delivery type
+     * 
      * @param object $request, int user_id
      * @return array
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true then add data of delivery type
+     * 
      */
     public function add(object $request, int $user_id): ?array
     {
@@ -81,10 +87,12 @@ class DeliveryTypes
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true then update delivery type data
+     * 
      * @param object $request, int $user id
      * @return bool
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true then update delivery type data
+     * 
      */
     public function update(object $request, int $user_id): ?bool
     {
@@ -107,10 +115,12 @@ class DeliveryTypes
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true then add delete record
+     * 
      * @param object $request, int $user id
      * @return bool
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true then add delete record
+     * 
      */
     public function delete(object $request, int $user_id): ?bool
     {

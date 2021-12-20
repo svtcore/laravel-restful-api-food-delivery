@@ -14,9 +14,11 @@ class Restaurants
     use ResultDataTrait;
 
     /**
+     * Getting collection of available restaurants
+     * 
      * @param null
      * @return Collection
-     * Description: Getting collection of available restaurants
+     * 
      */
     public function get(): ?iterable
     {
@@ -35,9 +37,11 @@ class Restaurants
     }
 
     /**
+     * Getting collection of restaurants which belong to user (for admin)
+     * 
      * @param int $id
      * @return Collection
-     * Description: Getting collection of restaurants which belong to user (for admin)
+     * 
      */
     public function getByUserId(int $id): ?iterable
     {
@@ -60,9 +64,11 @@ class Restaurants
     }
 
     /**
+     * Getting object of restaurant by id
+     * 
      * @param int $id
      * @return object
-     * Description: Getting object of restaurant by id
+     * 
      */
     public function getById(int $id): ?object
     {
@@ -83,9 +89,11 @@ class Restaurants
     }
 
     /**
+     * Getting collection of restaurants by product category id
+     * 
      * @param int $id
      * @return Collection
-     * Description: Getting collection of restaurants by product category id
+     * 
      */
     public function getByProductCategoryId(int $id): ?iterable
     {
@@ -109,9 +117,11 @@ class Restaurants
     }
 
     /**
+     * Getting collection of restaurants by product id
+     * 
      * @param int $id
      * @return Collection
-     * Description: Getting collection of restaurants by product id
+     * 
      */
     public function getByProductId(int $id): ?iterable
     {
@@ -135,9 +145,11 @@ class Restaurants
     }
 
     /**
+     * Getting collection of restaurants by city id
+     * 
      * @param int $id
      * @return Collection
-     * Description: Getting collection of restaurants by city id
+     * 
      */
     public function getByCityId(int $id): ?iterable
     {
@@ -164,9 +176,11 @@ class Restaurants
     }
 
     /**
+     * Search restaurant by name, description or product name
+     * 
      * @param string $query
      * @return Collection
-     * Description: Search restaurant by name, description or product name
+     * 
      */
     public function search(string $query): ?iterable
     {
@@ -192,9 +206,11 @@ class Restaurants
     }
 
     /**
+     * Getting collection of cities
+     * 
      * @param null
      * @return Collection
-     * Description: Getting collection of cities
+     * 
      */
     public function getCities(): ?iterable
     {
@@ -210,9 +226,11 @@ class Restaurants
     }
 
     /**
+     * adding new restaurant data and assign to manage current user to added restaurant
+     * 
      * @param object $request, int $user_id
      * @return array
-     * Description: adding new restaurant data and assign to manage current user to added restaurant
+     * 
      */
     public function add(object $request, int $user_id): ?array
     {
@@ -242,10 +260,12 @@ class Restaurants
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true update data of restaurant
+     * 
      * @param object $request, int user id
      * @return array
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true update data of restaurant
+     * 
      */
     public function update(object $request, int $user_id): ?array
     {
@@ -276,10 +296,12 @@ class Restaurants
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true delete records belong it
+     * 
      * @param int $id, int $user_id
      * @return bool
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true delete records belong it
+     * 
      */
     public function delete(int $id, int $user_id): ?bool
     {
@@ -298,10 +320,12 @@ class Restaurants
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true getting addresses belong to restaurant
+     * 
      * @param int $restaurant_id, int $address_id, int $user_id
      * @return object
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true getting addresses belong to restaurant
+     * 
      */
     public function getAddressById(int $restaurant_id, int $address_id, int $user_id): ?object
     {
@@ -321,10 +345,12 @@ class Restaurants
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true adding address to restaurant
+     * 
      * @param object $request, int $restaurant_id, int $user_id
      * @return array
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true adding address to restaurant
+     * 
      */
     public function addAddress(object $request, int $user_id): ?array
     {
@@ -346,10 +372,12 @@ class Restaurants
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true update address data
+     * 
      * @param object $request, int $user_id
      * @return bool
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true update address data
+     * 
      */
     public function updateAddress(object $request, int $user_id): ?bool
     {
@@ -371,10 +399,12 @@ class Restaurants
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true delete records
+     * 
      * @param object $request, int $user_id
      * @return bool
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true delete records
+     * 
      */
     public function deleteAddress(object $request, int $user_id): ?bool
     {
@@ -391,9 +421,11 @@ class Restaurants
     }
 
     /**
+     * Getting collection of delivery types
+     * 
      * @param int $id
      * @return Collection
-     * Description: Getting collection of delivery types
+     * 
      */
     public function getDeliveryTypes(int $id): ?iterable
     {
@@ -410,9 +442,11 @@ class Restaurants
     }
 
     /**
+     * Getting restaurant address by id
+     * 
      * @param int $id
      * @return Collection
-     * Description: Getting restaurant address by id
+     * 
      */
     public function getAddresses(int $id): ?iterable
     {

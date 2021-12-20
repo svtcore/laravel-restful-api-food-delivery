@@ -9,9 +9,11 @@ use Exception;
 class Users
 {
     /**
+     * Getting user data by id
+     * 
      * @param int $id
-     * @return json
-     * Description: Getting user data by id
+     * @return string
+     * 
      */
     public function getById(int $id): string
     {
@@ -19,9 +21,11 @@ class Users
     }
 
     /**
+     * Getting user data by phone number
+     * 
      * @param int $id
      * @return object
-     * Description: Getting user data by phone number
+     * 
      */
     public function getByPhoneNumber(int $phone): ?object
     {
@@ -36,9 +40,11 @@ class Users
     }
 
     /**
+     * Getting user data by id
+     * 
      * @param string $first_name, int $country_code, int $phone_number
-     * @return json
-     * Description: Getting user data by id
+     * @return object
+     * 
      */
     public function addByAdmin(string $first_name, int $country_code, int $phone_number): ?object
     {

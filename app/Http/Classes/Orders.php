@@ -15,10 +15,12 @@ class Orders
     use ResultDataTrait;
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true getting collection by params: restaurant, status
+     * 
      * @param int $status_id, int $restaurant_id, int $user_id
      * @return Collection
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true getting collection by params: restaurant, status
+     * 
      */
     public function getByStatusId(int $status_id, int $restaurant_id, int $user_id): ?iterable
     {
@@ -41,10 +43,12 @@ class Orders
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true getting orders by param restaurant id
+     * 
      * @param int $restaurant_id, int user_id
      * @return Collection
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true getting orders by param restaurant id
+     * 
      */
     public function getByRestaurantId(int $restaurant_id, int $user_id): ?iterable
     {
@@ -66,10 +70,12 @@ class Orders
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true getting orders which belong to current user
+     * 
      * @param int $user_id
      * @return Collection
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true getting orders which belong to current user
+     * 
      */
     public function getPersonal(int $user_id): ?iterable
     {
@@ -92,10 +98,12 @@ class Orders
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true getting object of order by id
+     * 
      * @param int $id, int $restaurant_id, int $user_id
      * @return object
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true getting object of order by id
+     * 
      */
     public function getById(int $id, int $restaurant_id, int $user_id): ?object
     {
@@ -120,11 +128,13 @@ class Orders
     }
 
     /**
-     * @param int $id, int $user_id
-     * @return object
-     * Description: Checking if current user has permission to manage data for restaurant.
+     * Checking if current user has permission to manage data for restaurant.
      * If true getting orders by params order id and user id to avoid that another user can not get 
      * order data of another user
+     * 
+     * @param int $id, int $user_id
+     * @return object
+     * 
      */
     public function getByIdUserId(int $id, int $user_id): ?object
     {
@@ -149,9 +159,11 @@ class Orders
     }
 
     /**
+     * Calculation total cost include discount if exist
+     * 
      * @param int $order_id, int $discount_id
      * @return mixed
-     * Description: Calculation total cost include discount if exist
+     * 
      */
     public function calculate_cost(int $order_id, ?int $discount_id): mixed
     {
@@ -180,11 +192,13 @@ class Orders
     }
 
     /**
-     * @param object $request, int $user_id
-     * @return array
-     * Description: Checking if current user has permission to manage data for restaurant.
+     * Checking if current user has permission to manage data for restaurant.
      * If true getting checking if user exist and get his id or if doesn't exist create and get id. 
      * After, adding order data, decode product json and adding their to order
+     * 
+     * @param object $request, int $user_id
+     * @return array
+     * 
      */
     public function addByAdmin(object $request, int $user_id): ?array
     {
@@ -238,10 +252,12 @@ class Orders
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true getting order object and update status
+     * 
      * @param object $request, int $user_id
      * @return bool
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true getting order object and update status
+     * 
      */
     public function updateStatus(object $request, int $user_id): ?bool
     {
@@ -260,11 +276,13 @@ class Orders
     }
 
     /**
-     * @param request, order id, restaurant id, user id
-     * @return bool
-     * Description: Checking if current user has permission to manage data for restaurant.
+     * Checking if current user has permission to manage data for restaurant.
      * If true getting checking if user exist and get his id or if doesn't exist create and get id. 
      * After, adding order data, decode product json and adding their to order
+     * 
+     * @param object $request, int user id
+     * @return bool
+     * 
      */
     public function update(object $request, int $user_id): ?bool
     {
@@ -320,10 +338,12 @@ class Orders
     }
 
     /**
+     * Checking if current user has permission to manage data for restaurant.
+     * If true checking order exist then doing cascade delete
+     * 
      * @param object $order_id, int $restaurant_id, int $user_id
      * @return bool
-     * Description: Checking if current user has permission to manage data for restaurant.
-     * If true checking order exist then doing cascade delete
+     * 
      */
     public function delete(int $order_id, int $restaurant_id, int $user_id): ?bool
     {
@@ -342,9 +362,11 @@ class Orders
     }
 
     /**
+     * adding order data, decode product json and adding their to order, calculate total cost and update data
+     * 
      * @param object $request, int user_id
      * @return array
-     * Description: adding order data, decode product json and adding their to order, calculate total cost and update data
+     * 
      */
     public function add(object $request, int $user_id): ?array
     {
@@ -386,9 +408,11 @@ class Orders
     }
 
     /**
+     * Getting collection of cities available for delivery
+     * 
      * @param null
      * @return Collection
-     * Description: Getting collection of cities available for delivery
+     * 
      */
     public function getCities(): ?iterable
     {
@@ -402,9 +426,11 @@ class Orders
     }
 
     /**
+     * Getting collection of street types 
+     * 
      * @param null
      * @return Collection
-     * Description: Getting collection of street types
+     * 
      */
     public function getStreetTypes(): ?iterable
     {

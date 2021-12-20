@@ -9,9 +9,11 @@ class Statuses
 {
 
     /**
+     * Getting collection of order statuses
+     * 
      * @param null
      * @return Collection
-     * Description: Getting collection of order statuses
+     * 
      */
     public function get(): ?iterable
     {
