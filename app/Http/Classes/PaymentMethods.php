@@ -13,8 +13,8 @@ class PaymentMethods
     /**
      * Getting collection of payment methods with optional param "available"
      * 
-     * @param bool $status
-     * @return Collection
+     * @param bool|null $status
+     * @return Collection|null
      * 
      */
     public function get(?bool $status = false): ?iterable
@@ -35,7 +35,7 @@ class PaymentMethods
      * Getting object of payment method by id
      * 
      * @param int $id
-     * @return object
+     * @return object|null
      * 
      */
     public function getById(int $id): ?object

@@ -13,16 +13,17 @@ use App\Http\Requests\api\v1\admin\orders\StatusUpdateRequest;
 
 class OrderController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __construct()
     {
         $this->orders = new Orders();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @param int $restaurant_id
+     * @return \Illuminate\Http\Response
+     */
     public function index($restaurant_id){
         $result = $this->orders->getByRestaurantId($restaurant_id, Auth::user()->id);
         if (iterator_count($result) > 0)
@@ -34,7 +35,8 @@ class OrderController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     * @param int $restaurant_id
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $restaurant_id)
@@ -55,7 +57,8 @@ class OrderController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $restaurant_id
+     * @param int $order_id
      * @return \Illuminate\Http\Response
      */
     public function show($restaurant_id, $order_id)
@@ -70,8 +73,9 @@ class OrderController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $restaurant_id
+     * @param int $order_id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $restaurant_id, $order_id)
@@ -90,6 +94,14 @@ class OrderController extends BaseController
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $restaurant_id
+     * @param int $order_id
+     * @return \Illuminate\Http\Response
+     */
     public function updateByStatus(Request $request, $restaurant_id, $order_id)
     {
         $request->query->set('restaurant_id', $restaurant_id);
@@ -109,7 +121,8 @@ class OrderController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $restaurant_id
+     * @param int $order_id
      * @return \Illuminate\Http\Response
      */
     public function destroy($restaurant_id, $order_id)
@@ -121,6 +134,13 @@ class OrderController extends BaseController
             return $this->sendError('ORDER', 'FAILED_DELETE');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $restaurant_id
+     * @param int $status_id
+     * @return \Illuminate\Http\Response
+     */
     public function showByStatus($restaurant_id, $status_id)
     {
         $result = $this->orders->getByStatusId($status_id, $restaurant_id, Auth::user()->id);

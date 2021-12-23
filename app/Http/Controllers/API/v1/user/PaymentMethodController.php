@@ -10,17 +10,17 @@ use App\Http\Requests\api\v1\user\payment_methods\IndexRequest;
 
 class PaymentMethodController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     public function __construct()
     {
         $this->payments = new PaymentMethods();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $validation = Validator::make($request->all(), (new IndexRequest)->rules());
@@ -38,7 +38,12 @@ class PaymentMethodController extends BaseController
                 return $this->sendError('PAYMENT_METHOD', 'FAILED_GET_PAYMENT_METHODS');
         }
     }
-
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
         $payment = $this->payments->getById($id);

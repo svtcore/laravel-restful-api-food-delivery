@@ -24,7 +24,7 @@ class Users
      * Getting user data by phone number
      * 
      * @param int $id
-     * @return object
+     * @return object|null
      * 
      */
     public function getByPhoneNumber(int $phone): ?object
@@ -42,8 +42,10 @@ class Users
     /**
      * Getting user data by id
      * 
-     * @param string $first_name, int $country_code, int $phone_number
-     * @return object
+     * @param string $first_name
+     * @param int $country_code
+     * @param int $phone_number
+     * @return object|null
      * 
      */
     public function addByAdmin(string $first_name, int $country_code, int $phone_number): ?object

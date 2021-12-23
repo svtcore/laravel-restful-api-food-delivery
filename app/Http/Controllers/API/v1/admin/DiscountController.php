@@ -8,17 +8,16 @@ use App\Http\Classes\Discounts;
 
 class DiscountController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     public function __construct()
     {
         $this->discounts = new Discounts();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $result = $this->discounts->getAvailable();

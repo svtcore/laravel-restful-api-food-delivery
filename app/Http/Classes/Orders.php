@@ -18,8 +18,10 @@ class Orders
      * Checking if current user has permission to manage data for restaurant.
      * If true getting collection by params: restaurant, status
      * 
-     * @param int $status_id, int $restaurant_id, int $user_id
-     * @return Collection
+     * @param int $status_id
+     * @param int $restaurant_id
+     * @param int $user_id
+     * @return Collection|null
      * 
      */
     public function getByStatusId(int $status_id, int $restaurant_id, int $user_id): ?iterable
@@ -46,8 +48,9 @@ class Orders
      * Checking if current user has permission to manage data for restaurant.
      * If true getting orders by param restaurant id
      * 
-     * @param int $restaurant_id, int user_id
-     * @return Collection
+     * @param int $restaurant_id
+     * @param int user_id
+     * @return Collection|null
      * 
      */
     public function getByRestaurantId(int $restaurant_id, int $user_id): ?iterable
@@ -74,7 +77,7 @@ class Orders
      * If true getting orders which belong to current user
      * 
      * @param int $user_id
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getPersonal(int $user_id): ?iterable
@@ -101,8 +104,10 @@ class Orders
      * Checking if current user has permission to manage data for restaurant.
      * If true getting object of order by id
      * 
-     * @param int $id, int $restaurant_id, int $user_id
-     * @return object
+     * @param int $id
+     * @param int $restaurant_id
+     * @param int $user_id
+     * @return object|null
      * 
      */
     public function getById(int $id, int $restaurant_id, int $user_id): ?object
@@ -132,8 +137,9 @@ class Orders
      * If true getting orders by params order id and user id to avoid that another user can not get 
      * order data of another user
      * 
-     * @param int $id, int $user_id
-     * @return object
+     * @param int $id
+     * @param int $user_id
+     * @return object|null
      * 
      */
     public function getByIdUserId(int $id, int $user_id): ?object
@@ -161,7 +167,8 @@ class Orders
     /**
      * Calculation total cost include discount if exist
      * 
-     * @param int $order_id, int $discount_id
+     * @param int $order_id
+     * @param int $discount_id
      * @return mixed
      * 
      */
@@ -196,8 +203,9 @@ class Orders
      * If true getting checking if user exist and get his id or if doesn't exist create and get id. 
      * After, adding order data, decode product json and adding their to order
      * 
-     * @param object $request, int $user_id
-     * @return array
+     * @param object $request
+     * @param int $user_id
+     * @return array|null
      * 
      */
     public function addByAdmin(object $request, int $user_id): ?array
@@ -255,8 +263,9 @@ class Orders
      * Checking if current user has permission to manage data for restaurant.
      * If true getting order object and update status
      * 
-     * @param object $request, int $user_id
-     * @return bool
+     * @param object $request
+     * @param int $user_id
+     * @return bool|null
      * 
      */
     public function updateStatus(object $request, int $user_id): ?bool
@@ -280,8 +289,9 @@ class Orders
      * If true getting checking if user exist and get his id or if doesn't exist create and get id. 
      * After, adding order data, decode product json and adding their to order
      * 
-     * @param object $request, int user id
-     * @return bool
+     * @param object $request
+     * @param int user id
+     * @return bool|null
      * 
      */
     public function update(object $request, int $user_id): ?bool
@@ -341,8 +351,10 @@ class Orders
      * Checking if current user has permission to manage data for restaurant.
      * If true checking order exist then doing cascade delete
      * 
-     * @param object $order_id, int $restaurant_id, int $user_id
-     * @return bool
+     * @param object $order_id
+     * @param int $restaurant_id
+     * @param int $user_id
+     * @return bool|null
      * 
      */
     public function delete(int $order_id, int $restaurant_id, int $user_id): ?bool
@@ -362,10 +374,11 @@ class Orders
     }
 
     /**
-     * adding order data, decode product json and adding their to order, calculate total cost and update data
+     * Adding order data, decode product json and adding their to order, calculate total cost and update data
      * 
-     * @param object $request, int user_id
-     * @return array
+     * @param object $request
+     * @param int user_id
+     * @return array|null
      * 
      */
     public function add(object $request, int $user_id): ?array
@@ -411,7 +424,7 @@ class Orders
      * Getting collection of cities available for delivery
      * 
      * @param null
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getCities(): ?iterable
@@ -429,7 +442,7 @@ class Orders
      * Getting collection of street types 
      * 
      * @param null
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getStreetTypes(): ?iterable

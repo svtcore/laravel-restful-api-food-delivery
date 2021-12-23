@@ -26,6 +26,12 @@ class ProductController extends BaseController
         $this->products = new Products();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $validation = Validator::make($request->all(), (new IndexRequest)->rules());
@@ -44,6 +50,12 @@ class ProductController extends BaseController
         }
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
         $product = $this->products->getById($id);
@@ -53,6 +65,13 @@ class ProductController extends BaseController
             return $this->sendError('PRODUCT', 'FAILED_GET_PRODUCT');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function showByCategoryId(Request $request, $id)
     {
         $validation = Validator::make($request->all(), (new CategoryRequest)->rules());
@@ -71,6 +90,13 @@ class ProductController extends BaseController
         }
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function showByRestaurantId(Request $request, $id)
     {
         $validation = Validator::make($request->all(), (new RestaurantRequest)->rules());
@@ -89,6 +115,11 @@ class ProductController extends BaseController
         }
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function showCategoryList()
     {
         $result = $this->products->getCategories();

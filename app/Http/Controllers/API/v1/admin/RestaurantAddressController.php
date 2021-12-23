@@ -18,6 +18,12 @@ class RestaurantAddressController extends BaseController
         $this->restaurants = new Restaurants();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @param int $restaurant_id
+     * @return \Illuminate\Http\Response
+     */
     public function index($restaurant_id)
     {
         $result = $this->restaurants->getAddresses($restaurant_id);
@@ -27,6 +33,13 @@ class RestaurantAddressController extends BaseController
             return $this->sendError('RESTAURANT_ADDRESS', 'RECORDS_NOT_FOUND');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $restaurant_id
+     * @param int $address_id
+     * @return \Illuminate\Http\Response
+     */
     public function show($restaurant_id, $address_id)
     {
         $result = $this->restaurants->getAddressById($restaurant_id, $address_id, Auth::user()->id);
@@ -36,6 +49,13 @@ class RestaurantAddressController extends BaseController
             return $this->sendError('RESTAURANT_ADDRESS', 'RECORD_NOT_FOUND');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $restaurant_id
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request, $restaurant_id)
     {
         $request->query->set('restaurant_id', $restaurant_id);
@@ -51,6 +71,14 @@ class RestaurantAddressController extends BaseController
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $restaurant_id
+     * @param int $address_id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $restaurant_id, $address_id)
     {
         $request->query->set('restaurant_id', $restaurant_id);
@@ -67,6 +95,14 @@ class RestaurantAddressController extends BaseController
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $restaurant_id
+     * @param int $address_id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(Request $request, $restaurant_id, $address_id)
     {
         $request->query->set('restaurant_id', $restaurant_id);

@@ -12,7 +12,7 @@ class Statuses
      * Getting collection of order statuses
      * 
      * @param null
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function get(): ?iterable

@@ -14,7 +14,7 @@ class Discounts
      * Getting available not expired discounts collection
      * 
      * @param null
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getAvailable(): ?iterable

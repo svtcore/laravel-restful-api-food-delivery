@@ -17,6 +17,13 @@ class DeliveryTypeController extends BaseController
         $this->delivery_types = new DeliveryTypes();
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $restaurant_id
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($restaurant_id, $delivery_type_id){
         $result = $this->delivery_types->getById($delivery_type_id);
         if (isset($result))
@@ -25,6 +32,13 @@ class DeliveryTypeController extends BaseController
             return $this->sendError('DELIVERY_TYPE', 'RECORD_NOT_FOUND');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $restaurant_id
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request, $restaurant_id)
     {
         $request->query->set('restaurant_id', $restaurant_id);
@@ -40,6 +54,14 @@ class DeliveryTypeController extends BaseController
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $restaurant_id
+     * @param int $delivery_type_id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $restaurant_id, $delivery_type_id)
     {
         $request->query->set('restaurant_id', $restaurant_id);
@@ -56,6 +78,14 @@ class DeliveryTypeController extends BaseController
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $restaurant_id
+     * @param int $delivery_type_id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(Request $request, $restaurant_id, $delivery_type_id)
     {
         $request->query->set('restaurant_id', $restaurant_id);

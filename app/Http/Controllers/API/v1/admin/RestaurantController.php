@@ -17,6 +17,11 @@ class RestaurantController extends BaseController
         $this->restaurants = new Restaurants();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $result = $this->restaurants->getByUserId(Auth::user()->id);
@@ -26,6 +31,12 @@ class RestaurantController extends BaseController
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), (new StoreRequest)->rules());
@@ -40,6 +51,12 @@ class RestaurantController extends BaseController
         }
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
         $result = $this->restaurants->getById($id);
@@ -49,6 +66,13 @@ class RestaurantController extends BaseController
             return $this->sendError('RESTAURANT', 'RECORD_NOT_FOUND');
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
         $request->query->set('restaurant_id', $id);
@@ -64,6 +88,12 @@ class RestaurantController extends BaseController
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
         $result = $this->restaurants->delete($id, Auth::user()->id);
@@ -73,6 +103,12 @@ class RestaurantController extends BaseController
             return $this->sendError('RESTAURANT', 'FAILED_DELETE_RESTAURANT');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function showDeliveryTypes($id){
         $result = $this->restaurants->getDeliveryTypes($id);
         if (iterator_count($result) > 0)

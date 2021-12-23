@@ -17,7 +17,7 @@ class Restaurants
      * Getting collection of available restaurants
      * 
      * @param null
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function get(): ?iterable
@@ -30,9 +30,9 @@ class Restaurants
                 'delivery_types',
             ])->get();
             if ($this->check_result($restaurants)) return $restaurants;
-            else return NULL;
+            else return null;
         } catch (Exception $e) {
-            return NULL;
+            return null;
         }
     }
 
@@ -40,8 +40,7 @@ class Restaurants
      * Getting collection of restaurants which belong to user (for admin)
      * 
      * @param int $id
-     * @return Collection
-     * 
+     * @return Collection|null
      */
     public function getByUserId(int $id): ?iterable
     {
@@ -67,7 +66,7 @@ class Restaurants
      * Getting object of restaurant by id
      * 
      * @param int $id
-     * @return object
+     * @return object|null
      * 
      */
     public function getById(int $id): ?object
@@ -92,7 +91,7 @@ class Restaurants
      * Getting collection of restaurants by product category id
      * 
      * @param int $id
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getByProductCategoryId(int $id): ?iterable
@@ -120,7 +119,7 @@ class Restaurants
      * Getting collection of restaurants by product id
      * 
      * @param int $id
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getByProductId(int $id): ?iterable
@@ -138,9 +137,9 @@ class Restaurants
             if ($this->check_result($restaurants))
                 return $restaurants;
             else
-                return NULL;
+                return null;
         } catch (Exception $e) {
-            return NULL;
+            return null;
         }
     }
 
@@ -148,7 +147,7 @@ class Restaurants
      * Getting collection of restaurants by city id
      * 
      * @param int $id
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getByCityId(int $id): ?iterable
@@ -179,7 +178,7 @@ class Restaurants
      * Search restaurant by name, description or product name
      * 
      * @param string $query
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function search(string $query): ?iterable
@@ -209,7 +208,7 @@ class Restaurants
      * Getting collection of cities
      * 
      * @param null
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getCities(): ?iterable
@@ -228,8 +227,9 @@ class Restaurants
     /**
      * adding new restaurant data and assign to manage current user to added restaurant
      * 
-     * @param object $request, int $user_id
-     * @return array
+     * @param object $request
+     * @param int $user_id
+     * @return array|null
      * 
      */
     public function add(object $request, int $user_id): ?array
@@ -263,8 +263,9 @@ class Restaurants
      * Checking if current user has permission to manage data for restaurant.
      * If true update data of restaurant
      * 
-     * @param object $request, int user id
-     * @return array
+     * @param object $request
+     * @param int $user_id
+     * @return array|null
      * 
      */
     public function update(object $request, int $user_id): ?array
@@ -299,8 +300,9 @@ class Restaurants
      * Checking if current user has permission to manage data for restaurant.
      * If true delete records belong it
      * 
-     * @param int $id, int $user_id
-     * @return bool
+     * @param int $id
+     * @param int $user_id
+     * @return bool|null
      * 
      */
     public function delete(int $id, int $user_id): ?bool
@@ -323,8 +325,10 @@ class Restaurants
      * Checking if current user has permission to manage data for restaurant.
      * If true getting addresses belong to restaurant
      * 
-     * @param int $restaurant_id, int $address_id, int $user_id
-     * @return object
+     * @param int $restaurant_id
+     * @param int $address_id
+     * @param int $user_id
+     * @return object|null
      * 
      */
     public function getAddressById(int $restaurant_id, int $address_id, int $user_id): ?object
@@ -348,8 +352,10 @@ class Restaurants
      * Checking if current user has permission to manage data for restaurant.
      * If true adding address to restaurant
      * 
-     * @param object $request, int $restaurant_id, int $user_id
-     * @return array
+     * @param object $request
+     * @param int $restaurant_id
+     * @param int $user_id
+     * @return array|null
      * 
      */
     public function addAddress(object $request, int $user_id): ?array
@@ -375,8 +381,9 @@ class Restaurants
      * Checking if current user has permission to manage data for restaurant.
      * If true update address data
      * 
-     * @param object $request, int $user_id
-     * @return bool
+     * @param object $request
+     * @param int $user_id
+     * @return bool|null
      * 
      */
     public function updateAddress(object $request, int $user_id): ?bool
@@ -402,8 +409,9 @@ class Restaurants
      * Checking if current user has permission to manage data for restaurant.
      * If true delete records
      * 
-     * @param object $request, int $user_id
-     * @return bool
+     * @param object $request
+     * @param int $user_id
+     * @return bool|null
      * 
      */
     public function deleteAddress(object $request, int $user_id): ?bool
@@ -424,7 +432,7 @@ class Restaurants
      * Getting collection of delivery types
      * 
      * @param int $id
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getDeliveryTypes(int $id): ?iterable
@@ -445,7 +453,7 @@ class Restaurants
      * Getting restaurant address by id
      * 
      * @param int $id
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getAddresses(int $id): ?iterable

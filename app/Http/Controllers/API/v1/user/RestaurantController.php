@@ -24,6 +24,11 @@ class RestaurantController extends BaseController
         $this->restaurants = new Restaurants();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $result = $this->restaurants->get();
@@ -56,6 +61,12 @@ class RestaurantController extends BaseController
         }
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function showByCategoryId($id)
     {
         $result = $this->restaurants->getByProductCategoryId($id);
@@ -65,6 +76,12 @@ class RestaurantController extends BaseController
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function showByCityId($id)
     {
         $result = $this->restaurants->getByCityId($id);
@@ -74,6 +91,12 @@ class RestaurantController extends BaseController
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function showByProductId($id)
     {
         $result = $this->restaurants->getByProductId($id);
@@ -83,6 +106,12 @@ class RestaurantController extends BaseController
             return $this->sendError('RESTAURANT', 'RECORDS_NOT_FOUND');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function showCitiesList()
     {
         $result = $this->restaurants->getCities();

@@ -7,17 +7,16 @@ use Illuminate\Http\Request;
 use App\Http\Classes\Statuses;
 class StatusController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     public function __construct()
     {
         $this->statuses = new Statuses();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $result = $this->statuses->get();

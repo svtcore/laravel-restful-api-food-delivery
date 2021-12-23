@@ -11,16 +11,16 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __construct()
     {
         $this->orders = new Orders();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $result = $this->orders->getPersonal(Auth::user()->id);
@@ -33,7 +33,7 @@ class OrderController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -65,6 +65,11 @@ class OrderController extends BaseController
             return $this->sendError('ORDER', 'RECORD_NOT_FOUND');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function showCitiesList()
     {
         $result = $this->orders->getCities();
@@ -74,6 +79,11 @@ class OrderController extends BaseController
             return $this->sendError('ORDER_CITY', 'RECORDS_NOT_FOUND');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function showStreetTypesList()
     {
         $result = $this->orders->getStreetTypes();

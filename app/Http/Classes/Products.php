@@ -14,8 +14,8 @@ class Products
     /**
      * Getting collection of products depends from optional param
      * 
-     * @param bool
-     * @return Collection
+     * @param bool|null $status
+     * @return Collection|null
      * 
      */
     public function get(?bool $status = false): ?iterable
@@ -37,7 +37,7 @@ class Products
      * Getting collection of products depends from optional param
      * 
      * @param int $product_id
-     * @return object
+     * @return object|null
      * 
      */
     public function getById(int $id): ?object
@@ -54,8 +54,9 @@ class Products
     /**
      * Getting collection of products by category id
      * 
-     * @param int $product_id, bool $status
-     * @return Collection
+     * @param int $id
+     * @param bool|null $status
+     * @return Collection|null
      * 
      */
     public function getByCategoryId(int $id, ?bool $status = false): ?iterable
@@ -79,8 +80,9 @@ class Products
     /**
      * Getting collection of products by restaurant id
      * 
-     * @param int $product_id, bool $status
-     * @return Collection
+     * @param int $product_id
+     * @param bool|null $status
+     * @return Collection|null
      * 
      */
     public function getByRestaurantId(int $id, ?bool $status = false): ?iterable
@@ -105,7 +107,7 @@ class Products
      * Getting collection of product categories
      * 
      * @param null
-     * @return Collection
+     * @return Collection|null
      * 
      */
     public function getCategories(): ?iterable
