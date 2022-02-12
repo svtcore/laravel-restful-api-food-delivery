@@ -1,4 +1,4 @@
-# Laravel restful API food delivery
+# Laravel API food delivery
 
 Personal project which provide API for food delivery service based on Laravel Framework (could be used like API for mobile app client)
 
